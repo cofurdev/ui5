@@ -1,0 +1,111 @@
+<mvc:View
+  controllerName="code.d3.orderapproval.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:sap.m="sap.m"
+  xmlns="sap.m"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:suite="sap.suite.ui.commons" >
+  <!-- 오더 마감 상세 내역 -->
+  <Page title="{i18n>titleOrderDetailPage}" showNavButton="false">
+    
+    <customHeader>
+      <Toolbar>
+        <ToolbarSpacer/>
+        <!-- [전체화면] 버튼 -->
+        <Button
+          icon="sap-icon://full-screen"
+          type="Transparent"
+          press=".onToggleFullScreen"
+          tooltip="{i18n>tooltipFullScreen}"/>
+        <!-- [닫기] 버튼 -->
+        <Button
+          icon="sap-icon://decline"
+          type="Transparent"
+          press=".onCloseDetail"
+          tooltip="{i18n>tooltipClose}"/>
+      </Toolbar>
+    </customHeader>
+
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <!-- 오더 상세 -->
+        <f:SimpleForm editable="false" layout="ResponsiveGridLayout" title="{i18n>titleOrderDetailForm}">
+          <f:content>
+            <!-- 생산 오더 번호 -->
+            <Label text="{i18n>colAufnr}"/>
+            <Text text="{detail>/Aufnr}"/>
+            
+            <!-- 완제품 자재 번호 -->
+            <Label text="{i18n>lblMatnr}"/>
+            <Text text="{detail>/Matnr}"/>
+            
+            <!-- 자재명 -->
+            <Label text="{i18n>lblMaktx}"/>
+            <Text text="{detail>/Maktx}"/>
+            
+            <!-- 플랜트 번호 -->
+            <Label text="{i18n>lblWerks}"/>
+            <Text text="{detail>/Werks}"/>
+            
+            <!-- 플랜트명 -->
+            <Label text="{i18n>lblName1}"/>
+            <Text text="{detail>/Name1}"/>
+            
+            <!-- 오더 수량 -->
+            <Label text="{i18n>colOrdqt}"/>
+            <ObjectNumber number="{detail>/Ordqt}" unit="{detail>/Meins}"/>
+            
+            <!-- 생산 실적 -->
+            <Label text="{i18n>lblActqtIn}"/>
+            <ObjectNumber number="{detail>/ActqtIn}" unit="{detail>/Meins}"/>
+            
+            <!-- 품질 검사 -->
+            <Label text="{i18n>lblQcomflag}"/>
+            <!-- 완료 / 미검사 -->
+            <ObjectStatus 
+              icon="{= ${detail>/Qcomflag} === 'X'  ? 'sap-icon://sys-enter-2' : 'sap-icon://error' }"
+              state="{= ${detail>/Qcomflag} === 'X' ? 'Success' : 'Error' }"
+              text="{= ${detail>/Qcomflag} === 'X'  ? ${i18n>txtQcomDone} : ${i18n>txtQcomNotDone} }"/>
+
+            <!-- 마감 요청일 -->
+            <Label text="{i18n>lblAedat}"/>
+            <Text text="{path: 'detail>/Aedat',
+                         type: 'sap.ui.model.type.Date',
+                         formatOptions: { pattern: 'yyyy-MM-dd'}}"/>
+
+            <!-- 요청자 -->
+            <Label text="{i18n>lblAenam}"/>
+            <Text text="{detail>/Aenam}"/>
+          </f:content>
+        </f:SimpleForm>
+
+        <suite:Timeline 
+            id="statusTimeline" enableScroll="false" sortOldestFirst="true" showHeaderBar="false">
+            <suite:content>
+                <!-- 생산 진행 (RELS) -->
+                <suite:TimelineItem
+                  id="timeRELS"
+                  title="{i18n>timelineTitleRels}"
+                  icon="{detail>/RelsIcon}"
+                  status="{detail>/RelsStatus}"
+                  text="{detail>/RelsText}"/>
+                <!-- 마감 요청 (CLRQ) -->
+                <suite:TimelineItem 
+                  id="timeCLRQ"
+                  title="{detail>/ClrqTitle}"
+                  icon="{detail>/ClrqIcon}"
+                  status="{detail>/ClrqStatus}"
+                  text="{detail>/ClrqText}"/>
+                <!-- 마감 완료 (TECO) -->
+                <suite:TimelineItem
+                  id="timeTECO"
+                  title="{i18n>timelineTitleTeco}"
+                  icon="{detail>/TecoIcon}"
+                  status="{detail>/TecoStatus}"
+                  text="{detail>/TecoText}"/>
+            </suite:content>
+        </suite:Timeline>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

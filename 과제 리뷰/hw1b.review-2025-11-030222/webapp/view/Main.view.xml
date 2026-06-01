@@ -1,0 +1,17 @@
+<mvc:View controllerName="code.d00.hw1b.review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+
+        <content>
+        
+            <Button 
+                text="{i18n>openDialogButtonText}"
+                press=".onOpenDialog"
+            />
+        
+        </content>
+
+
+    </Page>
+</mvc:View>

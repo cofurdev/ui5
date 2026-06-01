@@ -1,0 +1,20 @@
+<mvc:View controllerName="code.d3.project1.test.pp.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:smarttable="sap.ui.comp.smarttable">
+    <Page id="page" title="{i18n>title}">
+
+  <!-- SmartTable: lineItem 어노테이션 읽어서 컬럼 자동 생성 -->
+<smarttable:SmartTable 
+    id="defectSmartTable"
+    entitySet="DefectDetail"
+    header="상세 불량 내역"
+    useExportToExcel="true"
+    useVariantManagement="true"
+    useTablePersonalisation="true"
+    enableAutoBinding="true">
+
+</smarttable:SmartTable>
+
+    </Page>
+</mvc:View>

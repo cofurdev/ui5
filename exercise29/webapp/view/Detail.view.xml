@@ -1,0 +1,36 @@
+<mvc:View controllerName="code.d19.exercise29.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+
+    <Page 
+        id="idDetailPage"
+        title="{i18n>detailPageTitle}"
+    >
+        <VBox >
+            <!-- <Text text="이건 {OrderID} 주문의 상세페이지야." /> -->
+            <Text text="{
+                    parts: ['i18n>textDetailOrderID',
+                            {path: 'OrderID'}],
+                    formatter: '.formatMessage'
+            }"/>
+
+            <Text text="고객ID: {CustomerID}" />
+            <Text text="주문일자: {  path: 'OrderDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions:{
+                                        pattern: 'yyyy-MM-dd'
+                                    }}"/>
+            <Text text="배송주소: {ShipAddress}" />
+            <Text text="배송일자: { path:'ShippedDate',
+                                   type: 'sap.ui.model.type.Date',
+                                   formatOptions:{
+                                        pattern: 'yyyy-MM-dd'
+                                   }}" />
+            <Text text="" />
+
+
+        </VBox>
+    </Page>
+
+</mvc:View>

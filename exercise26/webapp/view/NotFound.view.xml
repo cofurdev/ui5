@@ -1,0 +1,27 @@
+<mvc:View controllerName="code.d19.exercise26.controller.NotFound"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page 
+        id="notFoundPage"
+        title="{i18n>notFoundPageTitle}">
+        
+        <IllustratedMessage 
+            title="{i18n>illMessageTitle}"
+            description="{i18n>illMessageDescription}"
+        >
+            <additionalContent>
+                <Button 
+                    text="{i18n>buttonTextNavView1}"
+                    press=".onNavView1" 
+                />
+                <Button 
+                    text="{i18n>buttonTextNavBack}"
+                    press=".onNavBack" 
+                />
+            </additionalContent>
+        
+        </IllustratedMessage>
+    </Page>
+
+</mvc:View>

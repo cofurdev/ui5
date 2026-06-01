@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Dialog 
+        id="idDialog"
+        title="Info"
+        type="Message"
+    >
+            <!-- Dialog의 내용을 다루는 content Aggregation -->
+            <content>
+                <Text text="고객 정보는 나중에 OData service에 저장된다."/>
+            </content>
+            <!-- Dialog 하단의 시작 버튼을 다루는 beginButton Aggregation -->
+            <beginButton>
+                <Button 
+                    text="닫힘"
+                    press=".onCloseDialog"/>
+            </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

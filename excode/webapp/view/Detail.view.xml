@@ -1,0 +1,131 @@
+<mvc:View controllerName="code.d19.excode.controller.Detail"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+
+    <f:DynamicPage>
+        <f:header>
+            <f:DynamicPageHeader>
+                <fb:FilterBar
+                    id="filterBar"
+                    showGoOnFB="true"
+                    search=".onSearch"
+                    useToolbar="false"                
+                >
+                    <fb:filterGroupItems>
+                        <fb:FilterGroupItem
+                            name="connectionid"
+                            label="Connection ID"
+                            groupName="Group1"
+                            visibleInFilterBar="true">
+                            <fb:control>
+                                <Input id="inputConnectionId"  />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+
+                        <fb:FilterGroupItem
+                            name="countryfrom"
+                            label="Country From"
+                            groupName="Group1"
+                            visibleInFilterBar="true">
+                            <fb:control>
+                                <Input id="inputCountryFrom" />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+
+                        <fb:FilterGroupItem
+                            name="cityto"
+                            label="City To"
+                            groupName="Group1"
+                            visibleInFilterBar="true">
+                            <fb:control>
+                                <Input id="inputCityTo" />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                    </fb:filterGroupItems>
+                </fb:FilterBar>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <VBox class="sapUiSmallMargin">
+                <Table id="routeTable"
+                       inset="false"
+                       mode="SingleSelectLeft"
+                       selectionChange=".onSelectionChange"
+                       items="{view>/Spfli}"
+                       growingThreshold="5"
+                       growing="true">
+                    <columns>
+                        <Column><header><Text text="Carrier ID" /></header></Column>
+                        <Column><header><Text text="Connection ID" /></header></Column>
+                        <Column><header><Text text="Country From" /></header></Column>
+                        <Column><header><Text text="City From" /></header></Column>
+                        <Column><header><Text text="Airp From" /></header></Column>
+                        <Column><header><Text text="Country To" /></header></Column>
+                        <Column><header><Text text="City To" /></header></Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Text text="{view>Carrid}" />
+                                <Text text="{view>Connid}" />
+                                <Text text="{view>Countryfr}" />
+                                <Text text="{view>Cityfrom}" />
+                                <Text text="{view>Airpfrom}" />
+                                <Text text="{view>Countryto}" />
+                                <Text text="{view>Cityto}" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                <!-- <viz:VizFrame
+                    id="flightChart"
+                    visible="false"
+                    uiConfig="{applicationSet:'fiori'}"
+                    width="100%"
+                    vizType="column"
+                    dataset="{chart>/Flights}"
+                    vizProperties='{
+                        "title": {
+                            "visible": true,
+                            "text": "항공편 잔여석 현황"
+                        }
+                    }'>
+                    
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset
+                            xmlns:viz.data="sap.viz.ui5.data"
+                            data="{chart>/Flights}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="날짜"
+                                    value="{path:'chart>Fldate', type:'sap.ui.model.type.Date', formatOptions:{pattern:'yy-MM-dd'}}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="잔여석" value="{chart>Seatsocc}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="날짜" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"/>
+                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="잔여석" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"/>
+                    </viz:feeds>
+                    
+
+                    
+                </viz:VizFrame> -->
+
+            </VBox>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

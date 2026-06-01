@@ -1,0 +1,107 @@
+<core:FragmentDefinition xmlns:table="sap.ui.mdc.table"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+>
+    <Dialog
+        id="idDialog"
+        title="{i18n>dialogTitle}"
+    >
+        <content>
+            
+                <f:SimpleForm 
+                    layout="ResponsiveGridLayout"
+                    columnsL="2"
+                    columnsM="2"
+                >
+                        <!-- 기본정보 -->
+                        <core:Title text="{i18n>formTitle1}" />
+                        
+                        <!-- 직원ID -->
+                        <Label text="{i18n>columnEmployeeID}"/>
+                        <Input value="{EmployeeID}" editable="false"/>
+                        
+                        <!-- 호칭 텍스트 -->
+                        <Label text="{i18n>columnEmployeeCourtesy}" />
+                        <Input value="{TitleOfCourtesy}{LastName}" editable="false"/>
+                        
+                        <!-- 이름 텍스트 -->
+                        <Label text="{i18n>columnEmployeeName}" />
+                        <Input value="{FirstName}" editable="false"/>
+                        
+                        <!-- 직위 텍스트 -->
+                        <Label text="{i18n>columnEmployeeTitle}"/>
+                        <Input value="{Title}" editable="false"/>
+                        
+                        <!-- 입사일 -->
+                        <Label text="{i18n>columnHireDate}" />
+                        <Input value="{
+                                    path: 'HireDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions:{
+                                        pattern:'yyyy-MM-dd'
+                                }}"
+                               editable="false"/>
+                        
+                        <!-- 생일 -->
+                        <Label text="{i18n>lableEmployeeBirth}" />
+                        <Input value="{
+                                    path: 'BirthDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions:{
+                                        pattern:'yyyy-MM-dd'
+                                }}"
+                              editable="false"/>
+                        
+                        <!-- 주소정보 -->
+                        <core:Title text="{i18n>formTitle2}" />
+
+                        <!-- Address -->
+                        <Label text="{i18n>labelAddress}" />
+                        <Input value="{Address}" editable="false"/>
+                        
+                        <!-- City -->
+                        <Label text="{i18n>labelCity}" />
+                        <Input value="{City}" editable="false"/>                    
+                        
+                        <!-- Region -->
+                        <Label text="{i18n>labelRegion}" />
+                        <Input value="{Region}" editable="false"/>
+                        
+                        <!-- PostalCode -->
+                        <Label text="{i18n>labelPostalCode}"/>
+                        <Input value="{PostalCode}" editable="false"/>
+                        
+                        <!-- Country -->
+                        <Label text="{i18n>labelCountry}" />
+                        <Input value="{Country}" editable="false"/>
+                        
+                        <!-- HomePhone -->
+                        <Label text="{i18n>labelHomePhone}" />
+                        <Input value="{HomePhone}" editable="false"/>
+
+                        <!-- Extension -->
+                        <Label text="{i18n>labelExtension}" />
+                        <Input value="{Extension}" editable="false"/>                   
+                        
+                </f:SimpleForm>
+                <f:SimpleForm
+                    layout="ResponsiveGridLayout"
+                    columnsL="1"
+                    columnsM="1"
+                >
+                        <!-- 요약 제목 -->
+                        <core:Title text="{i18n>formTitle3}" />
+                        
+                        <!-- 요약정보 -->
+                        <Text text="{Notes}"/>
+                </f:SimpleForm>           
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>dialogButtonText}"
+                press=".onCloseDialog"
+            />
+        </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

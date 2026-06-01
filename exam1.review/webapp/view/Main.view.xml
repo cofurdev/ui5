@@ -1,0 +1,61 @@
+<mvc:View controllerName="code.d19.exam1.review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"    
+>
+    <Page id="page" title="{i18n>title}">
+
+        <form:SimpleForm
+            class="sapUiResponsiveMargin"
+            width="auto"
+        >
+            
+            <core:Title text="{i18n>formContainerTitleInput}" />
+
+            <!-- 숫자1 입력에 대한 Label과 Input -->
+            <Label 
+                text="{i18n>labelInputNumber1}"
+                labelFor="idNumber1"
+            />
+            <Input 
+                id="idNumber1"
+                value="{ path:'/Input/num1',
+                         type:'sap.ui.model.type.Float'}"
+                required="true"
+            />
+
+            <!-- 숫자2 입력에 대한 Label과 Input -->
+            <Label 
+                text="{i18n>labelInputNumber2}"
+                labelFor="idNumber2"
+            />
+            <Input 
+                id="idNumber2"
+                value="{ path:'/Input/num2',
+                         type:'sap.ui.model.type.Float',
+                         constraints:{minimum: 1}}"
+                required="true"
+            />
+
+            <core:Title text="{i18n>formContainerTitleResult}" />
+
+            <!-- 더하기 결과 -->
+            <Label text="{i18n>labelAddition}" />
+            <Text text="{ path:'/Output/Addition',
+                          type:'sap.ui.model.type.Float'}" />
+            <Button text="{i18n>buttonAddition}"
+                    press=".onAddition"
+            />
+
+            <!-- 나누기 결과 -->
+            <Label text="{i18n>labelDivision}" />
+            <Text text="{ path:'/Output/Division',
+                          type:'sap.ui.model.type.Float'}" />
+            <Button text="{i18n>buttonDivision}"
+                    press=".onDivision"
+            />
+
+        </form:SimpleForm>
+    </Page>
+</mvc:View>

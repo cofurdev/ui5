@@ -1,0 +1,48 @@
+<mvc:View controllerName="code.d19.exercise31.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            headerText="제목"
+            expandable="true"
+            expanded="true"
+        >
+
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="학생목록"/>
+                    <ToolbarSpacer />
+                    <ComboBox 
+                        selectionChange="onComboBoxSelectionChange"
+                    >
+                        <items>
+                            <c:Item key="A" text="전체"/>
+                            <c:Item key="F" text="여성"/>
+                            <c:Item key="M" text="남성"/>
+
+                        </items>
+                    </ComboBox>
+                </Toolbar>
+            </headerToolbar>
+            <content>
+                <!-- <Text text="패널의 내용" /> -->
+                <List
+                    id="idList"
+                    items="{view>/Members}"
+                >
+                    <items>
+                        <StandardListItem 
+                            title="{view>name}님"
+                            description="{view>gender}"
+                        />
+                    </items>
+                </List>
+            
+            </content>
+        </Panel>
+    </Page>
+</mvc:View>

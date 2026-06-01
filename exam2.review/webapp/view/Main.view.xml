@@ -1,0 +1,145 @@
+<mvc:View controllerName="code.d19.exam2.review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+>
+    <Page id="page" title="{i18n>title}">
+        <Panel
+            class="sapUiResponsiveMargin"
+            width="auto"
+            expandable="true"
+            expanded="true"
+        >
+            <headerToolbar>
+                <Toolbar >
+                    <Title text="{i18n>newGoodsPanelTitle}"/>
+                    <ToolbarSpacer />
+                    <Button 
+                        text="{i18n>addButtonText}"
+                        icon="sap-icon://add"
+                        press=".onButtonAddPress"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <content>
+                <form:SimpleForm >
+                    <!-- 창고 -->
+                    <Label text="{i18n>storageLabelText}" />
+
+                    <!-- columns는 한 줄에 radio button을 몇개나 보이게 할 건지 결정 -->
+                    <RadioButtonGroup columns="2" >
+                        <RadioButton
+                            selected="{new>/Input/City/Seoul}"
+                            text="{i18n>seoulRadioButtonText}"/>
+                        <RadioButton
+                            selected="{new>/Input/City/Busan}"
+                            text="{i18n>busanRadioButtonText}"/>
+                    </RadioButtonGroup>
+
+                    <!-- 제품명 -->
+                    <Label 
+                        text="{i18n>labelProductName}"
+                        labelFor="idProductNameInput"
+                    />
+                    <Input 
+                        id="idProductNameInput"
+                        value="{ path: 'new>/Input/ProductName',
+                                 type: 'sap.ui.model.type.String',
+                                 constraints:{ minLength: 1 }}"
+                        required="true"
+                        placeholder="{i18n>placeHolderProductName}"
+                    />
+                    <!-- 가격 -->
+                    <Label text="{i18n>labelPrice}" />
+                    <Input value="{
+                            path:'new>/Input/Price',
+                            type:'sap.ui.model.type.Integer',
+                            constraints:{ minimum : 0 },
+                            formatOptions:{
+                                groupingEnabled: true
+                            }}" />                    
+                    <Input value="{new>/Input/Currency}" editable="false" />
+
+                    <!-- 재고수량 -->
+                    <Label text="{i18n>labelQuantity}" />
+                    <Input value="{
+                            path:'new>/Input/Quantity',
+                            type:'sap.ui.model.type.Integer',
+                            constraints:{ minimum : 0 },
+                            formatOptions:{
+                                groupingEnabled: true
+                            }}" />                    
+                    <Input value="{new>/Input/Unit}" editable="false" />
+                </form:SimpleForm>
+            </content>
+        </Panel>
+        
+        <Panel 
+            class="sapUiResponsiveMargin"
+            width="auto"
+            headerText="{i18n>panelTitle}"
+        >
+            <headerToolbar>
+                <Toolbar >
+                    <Title text="{i18n>panelTitle}"/>
+                    <ToolbarSpacer />
+                    <Text text="창고" />
+                    <ComboBox
+                        selectedKey="A"
+                        selectionChange=".onComboBoxSelectionChange"
+                    >
+                        <core:Item key="A" text="전체" />
+                        <core:Item key="S" text="서울" />
+                        <core:Item key="B" text="부산" />
+                        
+                    </ComboBox>
+                    <Button 
+                        text="{i18n>deleteButtonText}"
+                        icon="sap-icon://delete"
+                        press=".onButtonDeletePress"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <List
+                id="idList" 
+                items="{path:'/Products',
+                        sorter:{path:'Storage', group: true}}"
+                mode="MultiSelect"
+            >
+                <items>
+                    <ObjectListItem 
+                        title="{ProductName}"
+                        number="{ parts:['Quantity', 'Unit'],
+                                type:'sap.ui.model.type.Unit',
+                                formatOptions:{showMeasure: false }}"
+                        numberUnit="{Unit}"
+                    >
+                        <firstStatus>
+                            <ObjectStatus 
+                                title="재고상태"
+                                text="{ path: 'Quantity',
+                                        formatter: '.formatter.quantityText' }"
+                                state="{ path:'Quantity',
+                                         formatter: '.formatter.quantityState' }"
+                            />
+                        </firstStatus>
+                        <attributes>
+                            <ObjectAttribute 
+                                title="창고"
+                                text="{Storage}"
+                            />
+                            <ObjectAttribute 
+                                title="가격"
+                                text="{ parts:['Price', 'Currency'],
+                                        type:'sap.ui.model.type.Currency'}"
+                            />
+                        </attributes>
+
+                    </ObjectListItem>
+                </items>
+            </List>
+        
+        </Panel>
+    </Page>
+</mvc:View>

@@ -1,0 +1,66 @@
+<!-- CustomerInfo.fragment.xml 파일에는
+    선택한 고객 정보 중 테이블에서 보여주지 못한 정보까지 모두 출력한다. -->
+
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+>
+    <Dialog 
+        id="idCustomerInfoDialog"
+        title="{ parts: ['i18n>dialogTitle',
+                         'ContactName'],
+                 formatter: '.formatMessage'
+                }"
+    >
+        <content>
+            <!-- columnxL, columnsL, columnsM 스크린 사이즈에 따라 달라짐 -->
+            <f:SimpleForm 
+                layout="ColumnLayout"
+                columnsXL="2"
+                columnsL="2"
+                columnsM="2"
+            >
+                <!-- 기본정보 -->
+                <core:Title text="{i18n>generalSimpleFormTitle}"/>
+                
+                <!-- 고객ID -->
+                <Label text="{i18n>columnTextCustomerID}"/>
+                <Input value="{CustomerID}" editable="false"/>
+
+                <!-- 회사 -->
+                <Label text="{i18n>columnTextCompanyName}"/>
+                <Input value="{CompanyName}" editable="false"/>
+                
+                <!-- 담당자 -->
+                <Label text="{i18n>columnTextContactName}"/>
+                <Input value="{ContactName}" editable="false"/>
+                
+                <!-- 직위 -->
+                <Label text="{i18n>columnTextContactTitle}"/>
+                <Input value="{ContactTitle}" editable="false"/>
+
+                <!-- Title: 주소정보 -->
+                <core:Title text="{i18n>addressSimpleFormTitle}"/>
+
+                <!-- 주소 -->
+                <Label text="{i18n>columnTextAddress}"/>
+                <Input value="{Address}" editable="false"/>
+
+                <!-- 우편번호 -->
+                <Label text="{i18n>columnTextPostalCode}"/>
+                <Input value="{PostalCode}" editable="false"/>
+
+            </f:SimpleForm>
+
+        </content>
+
+        <beginButton>
+            <Button 
+                text="{i18n>closeButtonText}"
+                press=".onCloseDialog"
+            />
+
+        </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

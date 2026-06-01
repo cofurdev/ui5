@@ -1,0 +1,152 @@
+<mvc:View
+  controllerName="code.d3.orderapproval.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  displayBlock="true">
+  <Page id="globalOuterPage" class="sapUiResponsiveContent" showHeader="false" showFooter="true">
+    <content>
+      <f:FlexibleColumnLayout
+        id="fclLayout"
+        layout="{detail>/LayoutType}">
+        
+        <f:beginColumnPages>
+          <!-- 메인 페이지 : 조회 필터 + 오더 목록 테이블 -->
+          <f:DynamicPage id="mainPage" toggleHeaderOnTitleClick="true">
+
+            <f:title>
+              <f:DynamicPageTitle>
+                <f:heading>
+                  <!-- 생산 오더 마감 승인 -->
+                  <Title text="{i18n>titleMainPage}"/>
+                </f:heading>
+              </f:DynamicPageTitle>        
+            </f:title>
+
+            <f:header>
+              <f:DynamicPageHeader pinnable="true">
+                <core:Fragment fragmentName="code.d3.orderapproval.view.fragment.FilterBar" type="XML"/>
+              </f:DynamicPageHeader>
+            </f:header>
+
+            <f:content>
+              <!-- 오더 목록 테이블 : /OrderApprovalSet 바인딩, 다중 선택 모드 -->
+              <Table
+                id="orderTable"
+                items="{/OrderApprovalSet}"
+                mode="MultiSelect"
+                selectionChange=".onSelectionChange"
+                class="sapUiResponsiveMargin"
+                width="auto">
+
+                <!-- 테이블 툴바 : 타이틀 / 선택 건수 / 일괄 승인 / 일괄 반려 -->
+                <headerToolbar>
+                  <Toolbar id="tableToolbar">
+                    <!-- 테이블 타이틀 : "오더 목록" -->
+                    <Title id="tableTitle" text="{i18n>tableTitle}"/>
+                  </Toolbar>
+                </headerToolbar>
+
+                <columns>
+                  <!-- 생산 오더 번호 (AUFNR) -->
+                  <Column><ObjectIdentifier title="{i18n>colAufnr}"/></Column>
+                  <!-- 완제품 자재 명 (MAKTX) -->
+                  <Column><Text text="{i18n>colMaktx}"/></Column>
+                  <!-- 플랜트 명 (NAME1) -->
+                  <Column><Text text="{i18n>colWerks}"/></Column>
+                  <!-- 오더 수량 (ORDQT) : 우측 정렬 -->
+                  <Column hAlign="Right"><Text text="{i18n>colOrdqt}"/></Column>
+                  <!-- 진척률 (PROGRESSRATE) : 진행 바 표시 -->
+                  <Column><Text text="{i18n>colProgress}"/></Column>
+                  <!-- 계획 종료일 (PLN_EDT) -->
+                  <Column><Text text="{i18n>colPlnEdt}"/></Column>
+                  <!-- 마감 요청일 (AEDAT) -->
+                  <Column><Text text="{i18n>colAedat}"/></Column>
+                  <!-- 오더 상태 (ORDST) : CLRQ / TECO / CLRJ -->
+                  <Column><Text text="{i18n>colOrdst}"/></Column>
+                </columns>
+
+                <items>
+                  <!-- 행 클릭 시 우측 상세 패널(MidColumn) 오픈 -->
+                  <ColumnListItem press=".onItemPress" type="Active">
+                    <cells>
+                      <!-- 생산 오더 번호 : 핫스팟 링크, 클릭 시 상세 패널 오픈 -->
+                      <ObjectIdentifier title="{Aufnr}" />
+                      <!-- 완제품 자재 명 -->
+                      <Text text="{Maktx}"/>
+                      <!-- 플랜트 명 -->
+                      <Text text="{Name1}"/>
+                      <!-- 오더 수량 + 단위 (EA 등) -->
+                      <ObjectNumber number="{Ordqt}" unit="{Meins}"/>
+                      <!-- 진척률 바
+                          100% 이상 : Success(녹색)
+                          80% 이상  : Warning(주황)
+                          80% 미만  : Error(빨강) -->
+                      <ProgressIndicator
+                        percentValue="{Progressrate}"
+                        displayValue="{Progressrate}%"
+                        showValue="true"
+                        state="{= ${Progressrate} >= 100 ? 'Success'
+                                  : ${Progressrate} >= 80  ? 'Warning'
+                                  : 'Error'}"/>
+                      <!-- 계획 종료일 : yyyy-MM-dd 포맷 -->
+                      <Text text="{
+                        path: 'PlnEdt',
+                        type: 'sap.ui.model.type.Date',
+                        formatOptions: { pattern: 'yyyy-MM-dd' }
+                      }"/>
+                      <!-- 마감 요청일 : yyyy-MM-dd 포맷 -->
+                      <Text text="{
+                        path: 'Aedat',
+                        type: 'sap.ui.model.type.Date',
+                        formatOptions: { pattern: 'yyyy-MM-dd' }
+                      }"/>
+
+                      <!-- 오더 상태 배지
+                          CLRQ : Warning(주황) - 마감 요청
+                          TECO : Success(녹색) - 마감 완료
+                          CLRJ : Error(빨강)   - 마감 반려
+                          툴팁에 상태 코드(CLRQ 등) 표시 -->
+                      <ObjectStatus
+                        text="{OrdstTxt}"
+                        tooltip="{i18n>tooltipStatusCode} {Ordst}"
+                        state="{= ${Ordst} === 'CLRQ' ? 'Warning'
+                                  : ${Ordst} === 'TECO' ? 'Success'
+                                  : 'Error'}"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </f:content>
+          </f:DynamicPage>
+        </f:beginColumnPages>
+
+        <!-- 우측 상세 패널 : 행 클릭 시 슬라이드되어 표시되는 OrderDetail 뷰 -->
+        <f:midColumnPages>
+          <mvc:XMLView id="detailView" viewName="code.d3.orderapproval.view.OrderDetail"/>
+        </f:midColumnPages>
+
+      </f:FlexibleColumnLayout>
+    </content>
+    <footer>
+      <OverflowToolbar id="globalFooterToolbar">
+      <!-- 선택된 행 건수 표시 : "선택됨 N건" -->
+        <Text id="selectedCount" text="{i18n>textSelectedZero}"/>
+        <ToolbarSpacer id="globalFooterSpacer"/>
+        <!-- [승인] 버튼 -->
+        <Button
+          id="btnApprove"
+          text="{i18n>btnApproveLabel}"
+          type="Accept"
+          press=".onApprove"/>
+        <!-- [반려] 버튼 -->
+        <Button
+          id="btnReject"
+          text="{i18n>btnRejectLabel}"
+          type="Reject"
+          press=".onReject"/>
+      </OverflowToolbar>
+    </footer>
+  </Page>
+</mvc:View>

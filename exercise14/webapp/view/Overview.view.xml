@@ -1,0 +1,114 @@
+<mvc:View controllerName="code.d19.exercise14.controller.Overview"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+
+            <!-- 신규 고객 정보 -->
+            <Panel 
+                headerText="신규 고객"
+                class="sapUiResponsiveMargin"
+                width="auto" >
+                <content>
+                    
+                </content>
+
+            </Panel>
+            <!-- 고객 목록을 다루는 sap.m.Table -->
+            <Table
+                        id="customerTable"
+                        growing="true"
+                        growingThreshold="5"
+                        class="sapUiResponsiveMargin"
+                        width="auto"
+                        items="{
+                            path: '/Customers',
+                            sorter:[{path:'City', group:true},
+                                    {path:'CustomerName'}] }"
+                        mode="SingleSelectLeft"
+                        selectionChange=".onCustomerChange" >
+
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="고객 목록" />
+                                <ToolbarSpacer />
+                                <SearchField
+                                    width="40%"
+                                    search=".onFilterCustomers"
+                                    placeholder="검색할 고객명을 입력하세요." />
+                            </Toolbar>
+                        </headerToolbar>
+
+                        <columns>
+                            <Column><header><Text text="Customer Name"/></header></Column>
+                            <Column><header><Text text="Street"/></header></Column>
+                            <Column><header><Text text="Post Code"/></header></Column>
+                            <Column><header><Text text="City"/></header></Column>
+                            <Column><header><Text text="Country"/></header></Column>
+                            <Column><header><Text text="Email"/></header></Column>
+                        </columns>
+                        <items>
+                            <!-- ColumnListItem 컬럼에 들어갈 아이템을 정해줌 -->
+                            <ColumnListItem>
+                            
+                                <cells>
+                                    <!-- ObjectIdentifier 데이터를 구별할 수 있는 식별값, 그래서 굵은 글씨로 나타냄 -->
+                                    <ObjectIdentifier title="{CustomerName}" />
+                                    <Text text="{Street}" />
+                                    <Text text="{PostCode}" />
+                                    <Text text="{City}" />
+                                    <Text text="{Country}" />
+                                    <Text text="{Email}" />                                    
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <!-- 선택한 고객의 예약 기록을 출력하는 sap.m.Table -->
+                    <Table
+                        id="bookingTable"
+                        headerText="{= ${CustomerName} ? ${CustomerName} : '고객'}님의 예약 기록"
+                        items="{_Bookings}"
+                        growing="true"
+                        growingThreshold="5"
+                        class="sapUiResponsiveMargin"
+                        width="auto" >
+                        <columns>
+                            <Column><header><Text text="항공사ID" /></header></Column>
+                            <Column><header><Text text="항공편" /></header></Column>
+                            <Column><header><Text text="비행일자" /></header></Column>
+                            <Column><header><Text text="좌석등급" /></header></Column>
+                            <Column><header><Text text="거래금액" /></header></Column>
+                            <Column><header><Text text="취소여부" /></header></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem >
+                                <cells>
+                                    <ObjectIdentifier title="{AirlineID}" />
+                                    <ObjectIdentifier title="{ConnectionNumber}" />
+                                    <ObjectIdentifier title="{
+                                                                path: 'FlightDate', 
+                                                                type: 'sap.ui.model.type.Date',
+                                                                formatOptions: {
+                                                                    source:{
+                                                                        pattern:'yyyy-MM-dd'
+                                                                    },
+                                                                    style: 'medium'
+                                                                }    
+                                                            }" />
+                                    <Text text="{path:'Class',
+                                                formatter:'.formatter.classText'}" />
+                                    <ObjectNumber
+                                        number="{ForeignCurrencyPayment}"
+                                        unit="{ForeignCurrency}" />
+                                    <Text text="{IsCancelled}" />
+
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    
+                    </Table>
+        </content>
+
+    </Page>
+</mvc:View>

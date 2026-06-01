@@ -1,0 +1,41 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Dialog
+        id="idDialog"
+        title="{i18n>titleDialog}"
+    >
+        <content>  
+            <Table
+            id="idTable"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            mode="SingleSelectLeft"
+            items="{ path: '/Carriers',
+                     parameters: { 
+				        expand: 'to_schedules'
+                    }}"
+            >
+                <columns>
+                    <Column><Text text="{i18n>columnCarrierID}" /></Column>
+                    <Column><Text text="{i18n>columnCarrierName}" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{Carrid}" />
+                            <Text text="{Carrname}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <beginButton>
+            <Button text="{i18n>buttonOk}" press=".onOkButton" />
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>buttonClose}" press=".onCloseButton" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

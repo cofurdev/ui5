@@ -1,0 +1,365 @@
+<mvc:View controllerName="code.d19.ui5.review6.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout">
+    <Page
+        id="detailPage"
+        title="{Carrname}"
+        showNavButton="true"
+        navButtonPress=".onNavBack">
+        <content>
+            <VBox class="sapUiSmallMargin" width="100%">
+                <Panel headerText="{i18n>detailCarrierInfo}" expandable="true" expanded="true">
+                    <content>
+                        <form:SimpleForm
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                            labelSpanXL="3"
+                            labelSpanL="3"
+                            labelSpanM="4"
+                            labelSpanS="12"
+                            columnsXL="2"
+                            columnsL="2"
+                            columnsM="1"
+                            width="100%">
+                            <form:content>
+                                <Label text="{i18n>columnCarrid}"/>
+                                <Text text="{Carrid}"/>
+                                <Label text="{i18n>columnCarrname}"/>
+                                <Text text="{Carrname}"/>
+                                <Label text="{i18n>columnCurrcode}"/>
+                                <Text text="{Currcode}"/>
+                                <Label text="{i18n>columnUrl}"/>
+                                <Link text="{Url}" href="{Url}" target="_blank"/>
+                                <Label text="{i18n>columnConnectionCount}"/>
+                                <ObjectNumber
+                                    number="{
+                                        path: 'ConnectionCount',
+                                        type: 'sap.ui.model.type.Integer',
+                                        formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                    }"/>
+                            </form:content>
+                        </form:SimpleForm>
+                    </content>
+                </Panel>
+
+                <Panel
+                    headerText="{i18n>detailRevenueInfo}"
+                    expandable="true"
+                    expanded="true"
+                    visible="{= !!${to_RevenueGrowth/Carrid}}">
+                    <content>
+                        <l:Grid
+                            class="review6SummaryGrid"
+                            defaultSpan="XL3 L3 M6 S12"
+                            hSpacing="0.5"
+                            vSpacing="0.5"
+                            width="100%">
+                            <l:content>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <Label text="{i18n>revenueThisYear}" design="Bold"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'to_RevenueGrowth/RevenueThisYear',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',', maxFractionDigits: 0 }
+                                        }"
+                                        unit="{to_RevenueGrowth/Currency}"
+                                        emphasized="true"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <Label text="{i18n>revenueLastYear}" design="Bold"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'to_RevenueGrowth/RevenueLastYear',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',', maxFractionDigits: 0 }
+                                        }"
+                                        unit="{to_RevenueGrowth/Currency}"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <Label text="{i18n>revenueDiff}" design="Bold"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'to_RevenueGrowth/RevenueDiff',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',', maxFractionDigits: 0 }
+                                        }"
+                                        unit="{to_RevenueGrowth/Currency}"
+                                        state="{= ${to_RevenueGrowth/RevenueDiff} >= 0 ? 'Success' : 'Error'}"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <Label text="{i18n>growthRate}" design="Bold"/>
+                                    <ProgressIndicator
+                                        percentValue="{= Math.min(100, Math.max(0, Math.abs(${to_RevenueGrowth/GrowthRate})))}"
+                                        displayValue="{
+                                            path: 'to_RevenueGrowth/GrowthRate',
+                                            formatter: '.formatter.formatOccupancyDisplay'
+                                        }"
+                                        state="{= ${to_RevenueGrowth/GrowthRate} >= 0 ? 'Success' : 'Error'}"
+                                        width="7rem"/>
+                                </VBox>
+                            </l:content>
+                        </l:Grid>
+                    </content>
+                </Panel>
+
+                <Panel headerText="{i18n>detailConnectionTitle}" expandable="true" expanded="true">
+                    <content>
+                        <Table
+                            id="connectionTable"
+                            class="review6Table"
+                            fixedLayout="false"
+                            growing="true"
+                            growingScrollToLoad="true"
+                            items="{
+                                path: 'to_Connection',
+                                sorter: { path: 'Connid' }
+                            }"
+                            noDataText="{i18n>noConnections}">
+                            <columns>
+                                <Column hAlign="Begin">
+                                    <Text text="{i18n>columnConnid}"/>
+                                </Column>
+                                <Column hAlign="Begin">
+                                    <Text text="{i18n>columnRoute}"/>
+                                </Column>
+                                <Column hAlign="Center" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnFlightType}"/>
+                                </Column>
+                                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnDeptime}"/>
+                                </Column>
+                                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnArrtime}"/>
+                                </Column>
+                                <Column hAlign="End" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnDistance}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{Connid}"/>
+                                        <VBox class="review6RouteCell">
+                                            <HBox alignItems="Center">
+                                                <VBox class="review6RouteSide">
+                                                    <Text text="{Cityfrom}" class="review6RouteCity"/>
+                                                    <Text text="{Airpfrom}" class="review6RouteSub"/>
+                                                </VBox>
+                                                <VBox alignItems="Center" class="review6RouteMid">
+                                                    <core:Icon src="sap-icon://arrow-right" size="1rem" color="#0070f2"/>
+                                                    <Text text="{Fltime}" class="review6RouteSub"/>
+                                                </VBox>
+                                                <VBox class="review6RouteSide">
+                                                    <Text text="{Cityto}" class="review6RouteCity"/>
+                                                    <Text text="{Airpto}" class="review6RouteSub"/>
+                                                </VBox>
+                                            </HBox>
+                                        </VBox>
+                                        <ObjectStatus
+                                            text="{
+                                                path: 'Fltype',
+                                                formatter: '.formatter.formatFlightType'
+                                            }"
+                                            state="{
+                                                path: 'Fltype',
+                                                formatter: '.formatter.getFlightTypeState'
+                                            }"
+                                            icon="sap-icon://flight"/>
+                                        <Text text="{
+                                            path: 'Deptime',
+                                            type: 'sap.ui.model.type.Time',
+                                            formatOptions: { style: 'short' }
+                                        }"/>
+                                        <Text text="{
+                                            path: 'Arrtime',
+                                            type: 'sap.ui.model.type.Time',
+                                            formatOptions: { style: 'short' }
+                                        }"/>
+                                        <ObjectNumber
+                                            number="{
+                                                path: 'Distance',
+                                                type: 'sap.ui.model.type.Float',
+                                                formatOptions: { groupingEnabled: true, groupingSeparator: ',', maxFractionDigits: 0 }
+                                            }"
+                                            unit="{Distid}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+                <Panel headerText="{i18n>detailFlightTitle}" expandable="true" expanded="true">
+                    <content>
+                        <Table
+                            id="flightTable"
+                            class="review6Table"
+                            fixedLayout="false"
+                            growing="true"
+                            growingScrollToLoad="true"
+                            items="{
+                                path: 'to_Flight',
+                                sorter: { path: 'Fldate', descending: true }
+                            }"
+                            noDataText="{i18n>noFlights}">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <Title text="{i18n>detailFlightTitle}" level="H3"/>
+                                    <ToolbarSpacer/>
+                                    <Label text="{i18n>seatFilterLabel}" class="sapUiTinyMarginEnd"/>
+                                    <SegmentedButton
+                                        id="flightSeatFilter"
+                                        selectedKey="ALL"
+                                        selectionChange=".onFlightSeatFilter">
+                                        <items>
+                                            <SegmentedButtonItem key="ALL" text="{i18n>seatFilterAll}" icon="sap-icon://grid"/>
+                                            <SegmentedButtonItem key="SUCCESS" text="{i18n>seatFilterSuccess}" icon="sap-icon://status-positive"/>
+                                            <SegmentedButtonItem key="WARNING" text="{i18n>seatFilterWarning}" icon="sap-icon://status-critical"/>
+                                            <SegmentedButtonItem key="ERROR" text="{i18n>seatFilterError}" icon="sap-icon://status-negative"/>
+                                        </items>
+                                    </SegmentedButton>
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column hAlign="Begin">
+                                    <Text text="{i18n>columnConnid}"/>
+                                </Column>
+                                <Column hAlign="Begin">
+                                    <Text text="{i18n>columnFldate}"/>
+                                </Column>
+                                <Column hAlign="Begin" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnPlanetype}"/>
+                                </Column>
+                                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                                    <Text text="{i18n>columnPrice}"/>
+                                </Column>
+                                <Column hAlign="Begin">
+                                    <Text text="{i18n>columnSeatStatus}"/>
+                                </Column>
+                                <Column hAlign="End">
+                                    <Text text="{i18n>columnOccupancyRate}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{Connid}"/>
+                                        <Text text="{
+                                            path: 'Fldate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: { style: 'medium' }
+                                        }"/>
+                                        <Text text="{Planetype}"/>
+                                        <ObjectNumber
+                                            number="{
+                                                path: 'Price',
+                                                type: 'sap.ui.model.type.Float',
+                                                formatOptions: { groupingEnabled: true, groupingSeparator: ',', maxFractionDigits: 0 }
+                                            }"
+                                            unit="{Currency}"/>
+                                        <VBox class="review6SeatBox">
+                                            <HBox alignItems="Center" class="review6SeatRow">
+                                                <Label text="{i18n>seatClassEconomy}" class="review6SeatLabel"/>
+                                                <HBox class="review6SeatBar review6SeatEcon">
+                                                    <ProgressIndicator
+                                                        percentValue="{
+                                                            parts: [
+                                                                { path: 'Seatsocc' },
+                                                                { path: 'Seatsmax' }
+                                                            ],
+                                                            formatter: '.formatter.getSeatPercent'
+                                                        }"
+                                                        displayValue="{
+                                                            parts: [
+                                                                { path: 'Seatsocc' },
+                                                                { path: 'Seatsmax' }
+                                                            ],
+                                                            formatter: '.formatter.formatSeatDisplay'
+                                                        }"
+                                                        state="None"
+                                                        showValue="true"/>
+                                                </HBox>
+                                            </HBox>
+                                            <HBox alignItems="Center" class="review6SeatRow" visible="{= ${SeatsmaxB} > 0}">
+                                                <Label text="{i18n>seatClassBusiness}" class="review6SeatLabel"/>
+                                                <HBox class="review6SeatBar review6SeatBiz">
+                                                    <ProgressIndicator
+                                                        percentValue="{
+                                                            parts: [
+                                                                { path: 'SeatsoccB' },
+                                                                { path: 'SeatsmaxB' }
+                                                            ],
+                                                            formatter: '.formatter.getSeatPercent'
+                                                        }"
+                                                        displayValue="{
+                                                            parts: [
+                                                                { path: 'SeatsoccB' },
+                                                                { path: 'SeatsmaxB' }
+                                                            ],
+                                                            formatter: '.formatter.formatSeatDisplay'
+                                                        }"
+                                                        state="None"
+                                                        showValue="true"/>
+                                                </HBox>
+                                            </HBox>
+                                            <HBox alignItems="Center" class="review6SeatRow" visible="{= ${SeatsmaxF} > 0}">
+                                                <Label text="{i18n>seatClassFirst}" class="review6SeatLabel"/>
+                                                <HBox class="review6SeatBar review6SeatFirst">
+                                                    <ProgressIndicator
+                                                        percentValue="{
+                                                            parts: [
+                                                                { path: 'SeatsoccF' },
+                                                                { path: 'SeatsmaxF' }
+                                                            ],
+                                                            formatter: '.formatter.getSeatPercent'
+                                                        }"
+                                                        displayValue="{
+                                                            parts: [
+                                                                { path: 'SeatsoccF' },
+                                                                { path: 'SeatsmaxF' }
+                                                            ],
+                                                            formatter: '.formatter.formatSeatDisplay'
+                                                        }"
+                                                        state="None"
+                                                        showValue="true"/>
+                                                </HBox>
+                                            </HBox>
+                                        </VBox>
+                                        <ProgressIndicator
+                                            class="review6OccBar"
+                                            percentValue="{
+                                                parts: [
+                                                    { path: 'OccupancyRate' },
+                                                    { path: 'Seatsocc' },
+                                                    { path: 'Seatsmax' }
+                                                ],
+                                                formatter: '.formatter.getOccupancyPercent'
+                                            }"
+                                            displayValue="{
+                                                path: 'OccupancyRate',
+                                                formatter: '.formatter.formatOccupancyDisplay'
+                                            }"
+                                            state="{
+                                                parts: [
+                                                    { path: 'OccupancyRate' },
+                                                    { path: 'Seatsocc' },
+                                                    { path: 'Seatsmax' }
+                                                ],
+                                                formatter: '.formatter.getOccupancyState'
+                                            }"
+                                            showValue="true"
+                                            width="5.5rem"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

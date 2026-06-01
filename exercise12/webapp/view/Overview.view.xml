@@ -1,0 +1,37 @@
+<mvc:View controllerName="code.d19.exercise12.controller.Overview"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    >
+    <Page id="page" title="{i18n>title}">
+        <Panel headerText="New Customer" expandable="true" expanded="true">
+
+            <content>
+
+                <f:SimpleForm xmlns:f="sap.ui.layout.form" layout="ColumLayout" editable="true">
+                    <f:toolbar>
+                        <Toolbar>
+                            <ToolbarSpacer />
+                            <Button text="Create" icon="sap-icon://create" press=".onOpenDialog"/>
+                        </Toolbar>
+                    </f:toolbar>
+                    <f:content>
+                        <core:Title text="General Information" />
+                        <Label text="이름"/>
+                        <Input value=""/>
+
+                        <Label text="주소"/>
+                        <Input value=""/>
+
+                        <Label text="연락처"/>
+                        <Input value=""/>
+                    </f:content>
+                </f:SimpleForm>
+            </content> 
+        
+        
+        </Panel>
+    
+    </Page>
+</mvc:View>

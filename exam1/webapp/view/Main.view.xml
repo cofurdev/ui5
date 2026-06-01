@@ -1,0 +1,97 @@
+<mvc:View controllerName="code.d19.exam1.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:c="sap.ui.core"
+>
+    <Page id="page" title="{i18n>title}">
+        <Panel >
+            <f:SimpleForm> 
+                <f:content>
+                    <c:Title text="{i18n>inputTitle}" />
+
+                    <Label 
+                        text="{i18n>inputLabel1}"
+                        labelFor="idNumber1"
+                    />
+                    <Input 
+                        id="idNumber1"
+                        value="{ path:'/Input/number1',
+                                 type:'sap.ui.model.type.Float'                        
+                        }"
+                        required="true"    
+                    />
+
+                    <Label text="{i18n>inputLabel2}" 
+                           labelFor="idNumber2"
+                    />
+                    <Input 
+                        id="idNumber2"
+                        value="{ path:'/Input/number2',
+                                 type:'sap.ui.model.type.Float',
+                                 constraints:{minimum: 1}
+                        
+                        }"
+                        required="true"  
+                    />
+                </f:content>
+            </f:SimpleForm>
+            <f:SimpleForm >
+                <f:content>
+                    <!-- 계산기 결과 출력 제목 -->
+                    <c:Title text="{i18n>outputTitle}"/>
+
+                    <!-- 덧셈 결과 출력 -->
+                    <Label text="{i18n>outputLabel1}"
+                           labelFor="idOutput1"
+                    />
+                    <Input
+                        id="idOutput1"  
+                        value="{path: '/Output1/number3',
+                                type:'sap.ui.model.type.Float'}"
+                        editable="false" />
+                    <Button text="{i18n>outputLabel1}"
+                            press=".onPressPlus" />
+
+                    <!-- 뺄셈 결과 출력 -->
+                    <Label text="{i18n>outputLabel2}"
+                           labelFor="idOutput2"
+                    />
+                    <Input
+                        id="idOutput2"  
+                        value="{path: '/Output2/number3',
+                                type:'sap.ui.model.type.Float'}"
+                        editable="false" />
+                    <Button text="{i18n>outputLabel2}"
+                            press=".onPressMinus" />
+
+                    <!-- 곱셈 결과 출력 -->
+                    <Label text="{i18n>outputLabel3}"
+                           labelFor="idOutput3"
+                    />
+                    <Input
+                        id="idOutput3" 
+                        value="{path: '/Output3/number3',
+                                type:'sap.ui.model.type.Float'}"
+                        editable="false" />
+                    <Button text="{i18n>outputLabel3}"
+                            press=".onPressMultiple" />
+
+                    <!-- 나눗셈 결과 출력 -->
+                    <Label text="{i18n>outputLabel4}"
+                           labelFor="idOutput4"
+                    />
+                    <Input
+                        id="idOutput4" 
+                        value="{path: '/Output4/number3',
+                                type:'sap.ui.model.type.Float'}"
+                        editable="false" />
+                    <Button text="{i18n>outputLabel4}"
+                            press=".onPressDivison" />                                        
+                </f:content>
+            </f:SimpleForm>
+
+        </Panel>
+
+    </Page>
+</mvc:View>

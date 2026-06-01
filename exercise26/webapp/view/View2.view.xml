@@ -1,0 +1,16 @@
+<mvc:View controllerName="code.d19.exercise26.controller.View2"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page
+        id="page2"
+        title="{i18n>page2Title}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+    >
+        <VBox >
+            <Text text="{i18n>page2Text}"/>
+            <Button text="{i18n>page2ButtonText}"
+                    press=".onNavView1"/>
+        </VBox>
+    </Page>
+ </mvc:View>

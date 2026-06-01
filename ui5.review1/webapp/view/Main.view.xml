@@ -1,0 +1,39 @@
+<mvc:View controllerName="code.t3.ui5.review1.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <!-- sap.m.Page를 의미한다. -->
+    <Page id="page" title="{i18n>title}">
+        <!-- sap.m.Text를 의미한다. -->
+        <Text text = "예나-캐치캐치!" ></Text>
+        <!-- sap.m.Button을 의미한다. -->
+        <VBox >
+            <Button text="심장이 UP DOWN"> </Button>
+            <Button text="또 UP DOWN"> </Button>
+            <Button text="사랑의 화살을 당겨봐"> </Button>
+        </VBox>
+        <HBox >
+            <Button text="심장이 UP DOWN"> </Button>
+            <Button text="또 UP DOWN"> </Button>
+            <Button text="이러다 놓치겠어 Catch Catch"> </Button>
+        </HBox>
+        <!-- sap.m.Input을 의미한다. -->
+        <HBox >
+            <Input></Input>
+            <Input></Input>
+            <Input></Input>
+            <Input></Input>
+        </HBox>
+
+        <VBox >
+            <HBox >
+                <Text text="따따다닷다라" ></Text>
+                <Input ></Input>
+            </HBox>
+            <HBox >
+                <Text text="따따다닷다라" ></Text>
+                <Input ></Input>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

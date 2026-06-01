@@ -1,0 +1,167 @@
+<mvc:View controllerName="code.d19.ui5.review6.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+    <Page id="page" title="{i18n>title}" showHeader="true" enableScrolling="true" class="review6Page">
+        <subHeader>
+            <Toolbar id="filterBar" design="Transparent" class="review6FilterBar">
+                <Title text="{i18n>filterBarTitle}" level="H4"/>
+                <ToolbarSeparator/>
+                <SearchField
+                    id="carrierSearch"
+                    width="16rem"
+                    placeholder="{i18n>filterSearchPlaceholder}"
+                    search=".onCarrierSearch"
+                    liveChange=".onCarrierSearch"/>
+                <Label text="{i18n>filterCurrencyLabel}" class="sapUiTinyMarginBegin"/>
+                <Select
+                    id="currencyFilter"
+                    width="8rem"
+                    change=".onCurrencyFilterChange"
+                    forceSelection="false"/>
+                <ToolbarSpacer/>
+                <Button text="{i18n>filterReset}" icon="sap-icon://clear-filter" press=".onResetFilters"/>
+            </Toolbar>
+        </subHeader>
+        <content>
+            <VBox width="100%">
+                <Panel headerText="{i18n>summaryTitle}" class="sapUiSmallMargin">
+                    <content>
+                        <l:Grid
+                            class="review6SummaryGrid"
+                            defaultSpan="XL2 L4 M6 S12"
+                            hSpacing="0.5"
+                            vSpacing="0.5"
+                            width="100%">
+                            <l:content>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://flight" size="2rem" color="#0070f2"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/carrierCount',
+                                            type: 'sap.ui.model.type.Integer',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                        }"
+                                        emphasized="true"/>
+                                    <Label text="{i18n>summaryCarriers}" design="Bold"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://connected" size="2rem" color="#e9730c"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/connectionCount',
+                                            type: 'sap.ui.model.type.Integer',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                        }"
+                                        emphasized="true"/>
+                                    <Label text="{i18n>summaryConnections}" design="Bold"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://calendar" size="2rem" color="#107e3e"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/flightCount',
+                                            type: 'sap.ui.model.type.Integer',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                        }"
+                                        emphasized="true"/>
+                                    <Label text="{i18n>summaryFlights}" design="Bold"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://customer-order-entry" size="2rem" color="#5e4fa2"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/totalBookings',
+                                            type: 'sap.ui.model.type.Integer',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                        }"
+                                        emphasized="true"/>
+                                    <Label text="{i18n>summaryBookings}" design="Bold"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://money-bills" size="2rem" color="#bb0000"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/totalRevenue',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: {
+                                                groupingEnabled: true,
+                                                groupingSeparator: ',',
+                                                maxFractionDigits: 0
+                                            }
+                                        }"
+                                        unit="{summary>/currency}"
+                                        emphasized="true"/>
+                                    <Label text="{i18n>summaryRevenue}" design="Bold"/>
+                                </VBox>
+                                <VBox alignItems="Center" class="review6SummaryTile">
+                                    <core:Icon src="sap-icon://cancel" size="2rem" color="#ab218e"/>
+                                    <ObjectNumber
+                                        number="{
+                                            path: 'summary>/cancelledBookings',
+                                            type: 'sap.ui.model.type.Integer',
+                                            formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                        }"
+                                        emphasized="true"
+                                        state="Error"/>
+                                    <Label text="{i18n>summaryCancelled}" design="Bold"/>
+                                </VBox>
+                            </l:content>
+                        </l:Grid>
+                    </content>
+                </Panel>
+
+                <Table
+                    id="carrierTable"
+                    class="review6Table sapUiSmallMargin"
+                    fixedLayout="false"
+                    growing="true"
+                    growingScrollToLoad="true"
+                    items="{
+                        path: '/CarrierSet',
+                        sorter: { path: 'Carrid' }
+                    }">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{i18n>carrierTableTitle}" level="H2"/>
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column hAlign="Begin">
+                            <Text text="{i18n>columnCarrid}"/>
+                        </Column>
+                        <Column hAlign="Begin" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                            <Text text="{i18n>columnCarrname}"/>
+                        </Column>
+                        <Column hAlign="Center" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+                            <Text text="{i18n>columnCurrcode}"/>
+                        </Column>
+                        <Column hAlign="Begin" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline">
+                            <Text text="{i18n>columnUrl}"/>
+                        </Column>
+                        <Column hAlign="End">
+                            <Text text="{i18n>columnConnectionCount}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Navigation" press=".onCarrierPress">
+                            <cells>
+                                <Text text="{Carrid}"/>
+                                <Text text="{Carrname}"/>
+                                <Text text="{Currcode}" textAlign="Center"/>
+                                <Link text="{Url}" href="{Url}" target="_blank" wrapping="false"/>
+                                <ObjectNumber
+                                    number="{
+                                        path: 'ConnectionCount',
+                                        type: 'sap.ui.model.type.Integer',
+                                        formatOptions: { groupingEnabled: true, groupingSeparator: ',' }
+                                    }"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

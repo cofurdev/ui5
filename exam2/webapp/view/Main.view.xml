@@ -1,0 +1,60 @@
+<mvc:View controllerName="code.d19.exam2.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    >
+    <Page id="page" title="{i18n>title}">
+        <Panel 
+            headerText="{i18n>panelTitle}"
+        >
+            <headerToolbar>
+                <Toolbar >
+                    <ToolbarSpacer />
+                    <Title text="{i18n>attributeStorage}"/>
+                    <ComboBox
+                        id="idComboBox"
+                        selectedKey="A"
+                        selectionChange=".onComboBoxSelectionChange"
+                    >
+                        <items>
+                            <c:Item key="A" text="{i18n>comboTextAll}"/>
+                            <c:Item key="B" text="{i18n>comboTextBusan}"/>
+                            <c:Item key="S" text="{i18n>comboTextSeoul}"/>                            
+
+                        </items>
+                    </ComboBox>
+                    
+                </Toolbar>
+            </headerToolbar>
+            <content>
+                <!--상품 재고 목록 List-->
+                <List
+                    id="idList"
+                    items="{ path:'/Products',
+                             sorter:[{path:'Storage', group: true}, {path:'ProductName'}]}"
+                >
+                    <items>
+                        <ObjectListItem
+                            title="{ProductName}"
+                            number="{parts: [{path:'Quantity'}, {path:'Unit'}],
+                                    type:'sap.ui.model.type.Unit',
+                                    formatOptions:{showMeasure:false}}"
+                            numberUnit="{Unit}"
+                        >
+                            <firstStatus>
+                                
+                            </firstStatus>
+                            <attributes>
+                                <ObjectAttribute title="{i18n>attributeStorage}" text="{Storage}"/>
+                                <ObjectAttribute title="{i18n>attributePrice}" text="{ parts: [{path:'Price'}, {path:'Currency'}],
+                                                                                        type:'sap.ui.model.type.Currency',
+                                                                                        formatOptions:{showMeasure:true}}"/>
+                            </attributes>
+                        </ObjectListItem>
+                    </items>
+                </List>
+            </content>
+        </Panel>
+
+    </Page>
+</mvc:View>

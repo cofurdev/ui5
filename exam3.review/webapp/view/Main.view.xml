@@ -1,0 +1,39 @@
+<mvc:View controllerName="code.d19.exam3.review.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+
+        <Table 
+            class="sapUiResponsiveMargin"
+            width="auto"
+            headerText="{i18n>tableTitle}"
+            items="{/Employees}"
+        >
+            <columns>
+                <Column ><Text text="{i18n>columnEmployeeID}"     /></Column>
+                <Column ><Text text="{i18m>columnTitleofCourtesy}"/></Column>
+                <Column ><Text text="{i18n>columnFirstName}"      /></Column>
+                <Column ><Text text="{i18n>columnTitle}"          /></Column>
+                <Column ><Text text="{i18n>columnHireDate}"       /></Column>
+                <Column ><Text text="{i18n>columnCountry}"        /></Column>
+            </columns>
+            <items>
+                <ColumnListItem type="Navigation" press=".onOpenDialog">
+                    <!-- cells 기본값이라 안적어도 괜찮다. -->
+                    <cells> 
+                        <ObjectIdentifier title="{EmployeeID}" />
+                        <Text text="{TitleofCourtesy} {LastName}" />
+                        <Text text="{LastName}" />
+                        <Text text="{Title}" />
+                        <Text text="{ path:'HireDate',
+                                      type:'sap.ui.model.type.Date',
+                                      formatOptions:{
+                                        pattern:'yyyy.MM.dd'
+                                    }}" />
+                        <Text text="{Country}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+</mvc:View>

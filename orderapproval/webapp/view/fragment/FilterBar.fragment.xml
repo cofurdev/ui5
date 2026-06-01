@@ -1,0 +1,91 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar">
+
+    <fb:FilterBar 
+        id="orderFilterBar" 
+        useToolbar="false" 
+        search=".onSearch" 
+        showClearOnFB="true" 
+        clear=".onFilterClear">
+        
+        <fb:filterGroupItems>
+            <!-- 마감 요청일 (시작) -->
+            <fb:FilterGroupItem 
+                groupName="G1" 
+                name="AedatFrom" 
+                label="{i18n>lblAedatFrom}" 
+                visibleInFilterBar="true">
+                <fb:control>
+                    <!-- placeholder: 시작일 선택 -->
+                    <DatePicker 
+                        id="dpAedatFrom" 
+                        placeholder="{i18n>phAedatFrom}" 
+                        displayFormat="yyyy-MM-dd" 
+                        valueFormat="yyyy-MM-dd" />
+                </fb:control>
+            </fb:FilterGroupItem>
+            <!-- 마감 요청일 (종료) -->
+            <fb:FilterGroupItem 
+                groupName="G1" 
+                name="AedatTo" 
+                label="{i18n>lblAedatTo}" 
+                visibleInFilterBar="true">
+                <fb:control>
+                    <!-- placeholder: 종료일 선택 -->
+                    <DatePicker 
+                        id="dpAedatTo" 
+                        placeholder="{i18n>phAedatTo}" 
+                        displayFormat="yyyy-MM-dd" 
+                        valueFormat="yyyy-MM-dd" />
+                </fb:control>
+            </fb:FilterGroupItem>
+
+            <!-- 오더 상태 -->
+            <fb:FilterGroupItem 
+                groupName="G1" 
+                name="Ordst" 
+                label="{i18n>lblOrdst}" 
+                visibleInFilterBar="true">
+                <fb:control>
+                    <!-- placeholder: 상태 선택 -->
+                    <MultiComboBox id="cbOrdst" placeholder="{i18n>phOrdst}">
+                        <!-- 마감 요청(CLRQ) -->
+                        <core:Item key="CLRQ" text="{i18n>itemClrq}" />
+                        <!-- 마감 완료(TECO) -->
+                        <core:Item key="TECO" text="{i18n>itemTeco}" />
+                    </MultiComboBox>
+                </fb:control>
+            </fb:FilterGroupItem>
+
+            <!-- 플랜트 -->
+            <fb:FilterGroupItem 
+                groupName="G1" 
+                name="Werks" 
+                label="{i18n>lblWerks}" 
+                visibleInFilterBar="true">
+                <fb:control>
+                    <!-- placeholder: 플랜트 선택 -->
+                    <ComboBox id="cbWerks" placeholder="{i18n>phWerks}">
+                        <!-- [수정 필요!!!!!!]삼만리 포항 공장 -->
+                        <core:Item key="P001" text="{i18n>itemP001}" />
+                    </ComboBox>
+                </fb:control>
+            </fb:FilterGroupItem>
+            <!-- 생산 오더 번호 -->
+            <fb:FilterGroupItem 
+                groupName="G1" 
+                name="Aufnr" 
+                label="{i18n>colAufnr}" 
+                visibleInFilterBar="true">
+                <!-- placeholder: 오더 번호 입력 -->
+                <fb:control>
+                    <Input id="inAufnr" placeholder="{i18n>phAufnr}" showClearIcon="true"/>
+                </fb:control>
+            </fb:FilterGroupItem>
+
+        </fb:filterGroupItems>
+    </fb:FilterBar>
+
+</core:FragmentDefinition>

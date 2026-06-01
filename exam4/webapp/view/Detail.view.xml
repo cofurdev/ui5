@@ -1,0 +1,86 @@
+<mvc:View
+    controllerName="code.d19.exam4.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:c="sap.ui.core"
+    xmlns:t="sap.ui.table"
+    busyIndicatorDelay="0"
+>
+    <Page 
+        title="{parts:['i18n>detailPageTitle', 'OrderID'], formatter:'.formatMessage'}"
+        showNavButton="true"
+        navButtonPress=".onPageNavButtonPress"
+    >
+        <content>
+            <form:SimpleForm
+                class="sapUiResponsiveMargin"
+                width="auto"
+                columnsXL="3"
+                columnsL="3"
+                columnsM="3"
+            >
+            <f:content>
+                <!-- 고객정보  -->
+                <c:Title text="고객정보"/>
+                <Label text="ID" />
+                <Text text="{Customer/CustomerID}" />
+
+                <Label text="회사명" />
+                <Text text="{Customer/CompanyName}" />
+
+                <Label text="담당자" />
+                <Text text="{Customer/ContactName}" />
+
+                <Label text="직위" />
+                <Text text="{Customer/ContactTitle}" />
+
+                <!-- 주소정보  -->                   
+                <c:Title text="주소정보"/>
+                <Label text="주소" />
+                <Text text="{Customer/Address}" />
+
+                <Label text="도시" />
+                <Text text="{Customer/City}" />
+
+                <Label text="지역" />
+                <Text text="{Customer/Region}" />
+
+                <Label text="우편번호" />
+                <Text text="{Customer/PostalCode}" />
+
+                <Label text="국가" />
+                <Text text="{Customer/Country}" />
+
+                <Label text="HP" />
+                <Text text="{Customer/Phone}" />   
+
+                <Label text="Fax" />
+                <Text text="{Customer/Fax}" />
+
+                <!-- 담당직원 정보  -->
+                <c:Title text="담당직원정보"/>
+                <Label text="ID" />
+                <Text text="{Employee/EmployeeID}" />
+
+                <Label text="호칭" />
+                <Text text="{Employee/TitleofCourtesy}{Employee/LastName}" />
+
+                <Label text="이름" />
+                <Text text="{Employee/FirstName}" />
+
+                <Label text="직위" />
+                <Text text="{Employee/Title}" />
+            </f:content>
+
+            </form:SimpleForm>
+            <Panel 
+                headerText="{i18n>panelProductTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto"
+            >
+            
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

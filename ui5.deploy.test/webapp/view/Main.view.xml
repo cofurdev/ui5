@@ -1,0 +1,27 @@
+<mvc:View controllerName="code.d19.ui5.deploy.test.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}" class="sapUiResponsiveContent">
+        <Table 
+            items="{/CarrierSet}"
+            class="sapUiResponsiveMargin"
+            width="auto"
+        >
+            <columns>
+                <Column ><Text text="항공사" /></Column>
+                <Column ><Text text="항공사명" /></Column>
+                <Column ><Text text="통화코드" /></Column>
+                <Column ><Text text="URL" /></Column>
+            </columns>
+            <items>
+                <ColumnListItem >
+                    <ObjectIdentifier text="{Carrid}"/>
+                    <Text text="{Carrname}"/>
+                    <Text text="{Currcode}"/>
+                    <Text text="Link" herf="{Url}"/>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+    </Page>
+</mvc:View>

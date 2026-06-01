@@ -1,0 +1,39 @@
+<mvc:View controllerName="code.d19.exam3.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <Panel >
+            <Table 
+                headerText="{i18n>tableTitle}"
+                id="idTable"
+                items="{/Employees}"
+                mode="SingleSelectMaster"
+                selectionChange=".onItemPress"
+            >
+            <columns>
+                <Column ><Text text="{i18n>columnEmployeeID}"/></Column>
+                <Column ><Text text="{i18n>columnEmployeeCourtesy}"/></Column>
+                <Column ><Text text="{i18n>columnEmployeeName}"/></Column>
+                <Column ><Text text="{i18n>columnEmployeeTitle}"/></Column>
+                <Column ><Text text="{i18n>columnHireDate}"/></Column>
+            </columns>
+            <items>
+                <ColumnListItem 
+                    type="Navigation"
+                >
+                        <ObjectIdentifier title="{EmployeeID}"/>
+                        <Text text="{TitleOfCourtesy}{LastName}"/>
+                        <Text text="{FirstName}"/>
+                        <Text text="{Title}"/>
+                        <Text text="{
+                            path:'HireDate',
+                            type:'sap.ui.model.type.Date',
+                            formatOptions:{
+                                pattern: 'yyyy-MM-dd'
+                            }}"/>
+                </ColumnListItem>
+            </items>
+            </Table>
+        </Panel>
+    </Page>
+</mvc:View>

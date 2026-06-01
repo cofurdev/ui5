@@ -1,0 +1,349 @@
+<!-- ============================================================
+     Main.view.xml | 불량 분석 리포트 메인 뷰
+============================================================ -->
+<mvc:View
+    controllerName="code.d3.defect.analysis.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
+    
+    xmlns:core="sap.ui.core"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+
+    
+    displayBlock="true">
+
+    <f:FlexibleColumnLayout id="fclLayout" layout="{viewModel>/fclLayout}">
+
+        <!-- ════════════════════════════════════════════
+             BEGIN COLUMN — 필터 + 탭 + 테이블
+        ════════════════════════════════════════════ -->
+        <f:beginColumnPages>
+            <f:DynamicPage id="mainPage" showFooter="false">
+
+                <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <Title text="{i18n>mainPageTitle}" level="H2"/>
+                        </f:heading>
+                    </f:DynamicPageTitle>
+                </f:title>
+
+                <!-- FilterBar: selectionField 어노테이션 기반 자동 생성
+                     Plant(@mandatory) → 필수 입력 표시 자동 처리
+                     InspectionEndDate(@INTERVAL) → DatePicker From~To 자동 생성 -->
+                <f:header>
+                    <f:DynamicPageHeader pinnable="true">
+                        <smartFilterBar:SmartFilterBar
+                            id="smartFilterBar"
+                            entitySet="DefectDetail"
+                            search=".onSearch"
+                            useToolbar="false"
+                            showRestoreButton="false"
+                            showGoOnFB="true"/>
+                    </f:DynamicPageHeader>
+                </f:header>
+
+                <f:content>
+                    <VBox>
+                        <HBox wrap="Wrap" class="sapUiSmallMarginTop">
+                            
+                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="총 불량 수량" subheader="조회 기간 누적" frameType="OneByOne">
+                                <tileContent>
+                                    <TileContent footer="전월 대비 증가">
+                                        <NumericContent value="2,341" scale="EA" valueColor="Error" indicator="Up" />
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="전체 불량률" subheader="목표: 3.0%" frameType="OneByOne">
+                                <tileContent>
+                                    <TileContent footer="목표 초과">
+                                        <NumericContent value="4.7" scale="%" valueColor="Critical" indicator="None" />
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="불량 손실 금액" subheader="FI 전표 연동" frameType="OneByOne">
+                                <tileContent>
+                                    <TileContent footer="누계 실적">
+                                        <NumericContent value="38.2" scale="M" valueColor="Neutral" />
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="재작업 완료율" subheader="안전재고 확보 목적" frameType="OneByOne">
+                                <tileContent>
+                                    <TileContent footer="양호">
+                                        <NumericContent value="68.4" scale="%" valueColor="Good" indicator="Up" />
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                        </HBox>
+
+                        <IconTabBar
+                            id="idIconTabBar"
+                            expanded="{device>/isNoPhone}"
+                            class="sapUiResponsiveContentPadding">
+                            <items>
+                                <!-- 탭: 품질 분석 대시보드 -->
+                                <IconTabFilter
+                                    text="품질 분석 대시보드"
+                                    icon="sap-icon://bar-chart"
+                                    key="DefectDashboard">
+
+                                    <HBox wrap="Wrap" class="sapUiSmallMargin">
+                                        
+                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="공정별 불량 현황" subtitle="공정 및 플랜트별 실시간 집계" iconSrc="sap-icon://bar-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartProcess" vizType="column" width="100%" height="400px">
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="공정" value="{ProcessName}" />
+                                                                <viz.data:DimensionDefinition name="플랜트" value="{Plant}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="불량수량" value="{DefectQty}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="불량수량" />
+                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="공정" />
+                                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="플랜트" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                        <f:Card class="sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="월별 불량 발생 추이" subtitle="원재료 손실 금액 기준 트렌드 분석" iconSrc="sap-icon://line-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartTrend" vizType="line" width="100%" height="400px">
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="연월" value="{InspectionYearMonth}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="손실금액" value="{LossAmount}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="손실금액" />
+                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="연월" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                    </HBox>
+                                </IconTabFilter>
+                                <!-- 탭: 불량 상세 목록 (count는 dataReceived에서 바인딩) -->
+                                <IconTabFilter
+                                    text="{i18n>tabDefectList}"
+                                    icon="sap-icon://table-view"
+                                    key="DefectDetail"
+                                    count="{viewModel>/defectCount}">
+
+                                    <smartTable:SmartTable
+                                        id="smartTable"
+                                        entitySet="DefectDetail"
+                                        smartFilterId="smartFilterBar"
+                                        tableType="ResponsiveTable"
+                                        enableExport="true"
+                                        header="{i18n>defectListTitle}"
+                                        showRowCount="true"
+                                        enableAutoBinding="false"
+                                        useTablePersonalisation="true"
+                                        useVariantManagement="true"
+                                        initiallyVisibleFields="InspectionNo,OrderNo,MaterialNo,Plant,ProcessName,DefectCode,DefectQty,InspectionEndDate"
+                                        requestAtLeastFields="Unit,MaterialName,DefectText"
+                                        initialise=".onSmartTableInit"
+                                        dataReceived=".onDataReceived"
+                                        beforeRebindTable=".onBeforeRebindTable"
+                                    >
+
+                                        <Table
+                                            alternateRowColors="true"
+                                            fixedLayout="true"
+                                            autoPopinMode="false"
+                                            popinLayout="Block"
+                                        >
+
+                                            <columns>
+                                                <!-- 검사 번호: 항상 표시 -->
+                                                <Column width="8rem" demandPopin="false">
+                                                    <Text text="{i18n>inspectionNo}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"InspectionNo","leadingProperty":"InspectionNo","columnIndex":10}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 생산 오더: 항상 표시 -->
+                                                <Column width="9rem" demandPopin="false">
+                                                    <Text text="{i18n>orderNo}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"OrderNo","leadingProperty":"OrderNo","columnIndex":20}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 자재번호: Tablet 이하에서 popin 허용 -->
+                                                <Column width="15rem" minScreenWidth="Tablet" demandPopin="true">
+                                                    <Text text="{i18n>materialNo}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"MaterialNo","leadingProperty":"MaterialNo","columnIndex":30}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 플랜트: Tablet 이하 popin -->
+                                                <Column width="5rem" minScreenWidth="Tablet" demandPopin="true">
+                                                    <Text text="{i18n>plant}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"Plant","leadingProperty":"Plant","columnIndex":40}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 발생 공정: Tablet 이하 popin -->
+                                                <Column width="7rem" minScreenWidth="Tablet" demandPopin="true">
+                                                    <Text text="{i18n>processName}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"ProcessName","leadingProperty":"ProcessName","columnIndex":50}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 불량 코드: Desktop 이하 popin -->
+                                                <Column width="15rem" minScreenWidth="Desktop" demandPopin="true">
+                                                    <Text text="{i18n>defectCode}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"DefectCode","leadingProperty":"DefectCode","columnIndex":60}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 검사 완료일: Desktop 이하 popin -->
+                                                <Column width="7rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+                                                    <Text text="{i18n>inspectionEndDate}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"InspectionEndDate","leadingProperty":"InspectionEndDate","columnIndex":80}'/>
+                                                    </customData>
+                                                </Column>
+
+                                                <!-- 불량 수량: 항상 표시, 우측 정렬 -->
+                                                <Column width="6rem" demandPopin="false" hAlign="End">
+                                                    <Text text="{i18n>defectQty}"/>
+                                                    <customData>
+                                                        <core:CustomData key="p13nData"
+                                                            value='\{"columnKey":"DefectQty","leadingProperty":"DefectQty","columnIndex":90}'/>
+                                                    </customData>
+                                                </Column>
+                                            </columns>
+
+                                            <items>
+                                                <!--
+                                                    highlight: DefectQty 기준 행 컬러바
+                                                    > 10 → Error(빨강) / > 5 → Warning(노랑) / 이하 → None
+                                                    ※ DefectStatus 필드 추가 시 상태 기준으로 교체 권장
+                                                -->
+                                                <ColumnListItem
+                                                    type="Active"
+                                                    press=".onRowPress"
+                                                    highlight="{= ${DefectQty} > 10 ? 'Error'
+                                                                : ${DefectQty} > 5  ? 'Warning'
+                                                                : 'Success' }">
+                                                    <cells>
+                                                        <!-- 검사 번호 -->
+                                                        <Text text="{InspectionNo}"/>
+
+                                                        <!-- 생산 오더 번호 -->
+                                                        <Text text="{OrderNo}"/>
+
+                                                        <!--
+                                                            자재번호 + 자재명: 
+                                                            - tooltip          : hover 시 전체 텍스트 표시
+                                                        -->
+                                                        <ObjectIdentifier
+                                                            title="{MaterialNo}"
+                                                            text="{MaterialName}"
+                                                            tooltip="{MaterialNo} - {MaterialName}"
+                                                            titleActive="false"/>
+
+                                                        <!-- 플랜트 -->
+                                                        <Text text="{Plant}"/>
+
+                                                        <!-- 발생 공정 -->
+                                                        <Text text="{ProcessName}"/>
+
+                                                        <!--
+                                                            불량 코드 + 불량명:
+                                                            - tooltip          : hover 시 전체 텍스트 표시
+                                                        -->
+                                                        <ObjectIdentifier
+                                                            title="{DefectCode}"
+                                                            text="{DefectText}"
+                                                            titleActive="false"
+                                                            tooltip="{DefectCode} - {DefectText}"
+                                                        />
+
+                                                        <!-- 검사 완료일: Date 타입 포맷 -->
+                                                        <Text text="{
+                                                            path: 'InspectionEndDate',
+                                                            type: 'sap.ui.model.type.Date',
+                                                            formatOptions: { pattern: 'yyyy-MM-dd' }
+                                                        }"/>
+
+                                                        <!--
+                                                            불량 수량: ObjectNumber로 수량+단위 함께 표시
+                                                            state: 수량 많을수록 빨간색 강조
+                                                        -->
+                                                        <ObjectNumber
+                                                            number="{DefectQty}"
+                                                            unit="{Unit}"
+                                                            state="{= ${DefectQty} > 10 ? 'Error'
+                                                                    : ${DefectQty} > 4  ? 'Warning'
+                                                                    : 'None' }"/>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </smartTable:SmartTable>
+                                </IconTabFilter>
+                            </items>
+                        </IconTabBar>
+                    </VBox>
+                </f:content>
+            </f:DynamicPage>
+        </f:beginColumnPages>
+
+        <!-- ════════════════════════════════════════════
+             MID COLUMN — 오더 상세 패널
+        ════════════════════════════════════════════ -->
+        <f:midColumnPages>
+            <mvc:XMLView
+                id="detailView"
+                viewName="code.d3.defect.analysis.view.OrderDetail"/>
+        </f:midColumnPages>
+
+    </f:FlexibleColumnLayout>
+</mvc:View>

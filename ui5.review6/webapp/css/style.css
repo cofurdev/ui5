@@ -1,0 +1,120 @@
+/* App shell height */
+html, body, #content, .sapUiBody, #container, #container-uiarea {
+    height: 100%;
+}
+
+.review6Page {
+    height: 100%;
+}
+
+#app, .sapMApp {
+    height: 100%;
+}
+
+/* Summary tiles */
+.review6SummaryGrid {
+    width: 100%;
+}
+
+.review6SummaryTile {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--sapTile_Background, #fff);
+    box-shadow: var(--sapContent_Shadow0, 0 0 0.125rem rgba(0, 0, 0, 0.15));
+    align-items: center;
+}
+
+.review6SummaryTile .sapMObjectNumber {
+    margin-top: 0.25rem;
+}
+
+.review6SummaryTile .sapMLabel {
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+/* Filter bar */
+.review6FilterBar {
+    border-bottom: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
+    padding-bottom: 0.25rem;
+}
+
+/* Tables – auto column width */
+.review6Table {
+    width: 100%;
+}
+
+.review6Table .sapMListTblCell {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Route cell */
+.review6RouteCell {
+    padding: 0.15rem 0;
+}
+
+.review6RouteSide {
+    min-width: 5rem;
+}
+
+.review6RouteCity {
+    font-weight: bold;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.review6RouteSub {
+    color: var(--sapContent_LabelColor);
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.review6RouteMid {
+    padding: 0 0.35rem;
+    text-align: center;
+}
+
+/* Seat indicators – class colors */
+.review6SeatBox {
+    min-width: 11rem;
+}
+
+.review6SeatRow {
+    margin-bottom: 0.3rem;
+}
+
+.review6SeatRow:last-child {
+    margin-bottom: 0;
+}
+
+.review6SeatLabel {
+    width: 3.5rem;
+    min-width: 3.5rem;
+    padding-top: 0.3rem;
+}
+
+.review6SeatBar .sapMPI {
+    width: 8rem !important;
+    max-width: 8rem;
+}
+
+.review6SeatEcon .sapMPIBar {
+    background: #107e3e !important;
+}
+
+.review6SeatBiz .sapMPIBar {
+    background: #e9730c !important;
+}
+
+.review6SeatFirst .sapMPIBar {
+    background: #5e4fa2 !important;
+}
+
+.review6OccBar.sapMPI {
+    width: 5.5rem !important;
+    max-width: 5.5rem;
+}
