@@ -40,6 +40,13 @@
         "settings": {
           "odataVersion": "2.0"
         }
+      },
+      "kpiService": {             
+        "uri": "/sap/opu/odata/sap/ZUI_D3_PP_KPI_V2/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
       }
     }
   },
@@ -88,6 +95,10 @@
         "dataSource": "chartService",
         "preload": true,
         "settings": {}
+      },
+      "kpi": {                             
+        "dataSource": "kpiService",
+        "preload": true
       }
     },
     "resources": {

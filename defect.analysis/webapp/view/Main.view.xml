@@ -53,40 +53,30 @@
 
                 <f:content>
                     <VBox>
-                        <HBox wrap="Wrap" class="sapUiSmallMarginTop">
-                            
-                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="총 불량 수량" subheader="조회 기간 누적" frameType="OneByOne">
-                                <tileContent>
-                                    <TileContent footer="전월 대비 증가">
-                                        <NumericContent value="2,341" scale="EA" valueColor="Error" indicator="Up" />
-                                    </TileContent>
-                                </tileContent>
+                        <HBox wrap="Wrap" class="sapUiTinyMarginBottom">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="전체 불량률" subheader="금월 누적 기준">
+                                <TileContent>
+                                    <NumericContent value="{kpi>/TotalDefectRate}" valueColor="Critical" indicator="Up" scale="%" />
+                                </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="전체 불량률" subheader="목표: 3.0%" frameType="OneByOne">
-                                <tileContent>
-                                    <TileContent footer="목표 초과">
-                                        <NumericContent value="4.7" scale="%" valueColor="Critical" indicator="None" />
-                                    </TileContent>
-                                </tileContent>
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="총 폐기 손실액" subheader="FI 전표 연동">
+                                <TileContent>
+                                    <NumericContent value="{kpi>/TotalLossAmount}" scale="KRW" />
+                                </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="불량 손실 금액" subheader="FI 전표 연동" frameType="OneByOne">
-                                <tileContent>
-                                    <TileContent footer="누계 실적">
-                                        <NumericContent value="38.2" scale="M" valueColor="Neutral" />
-                                    </TileContent>
-                                </tileContent>
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="최다 불량 품목" subheader="완제품 기준">
+                                <TileContent>
+                                    <Text text="{kpi>/MaxDefectMaterialName}" wrapping="true" />
+                                </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiMediumMarginEnd sapUiMediumMarginBottom" header="재작업 완료율" subheader="안전재고 확보 목적" frameType="OneByOne">
-                                <tileContent>
-                                    <TileContent footer="양호">
-                                        <NumericContent value="68.4" scale="%" valueColor="Good" indicator="Up" />
-                                    </TileContent>
-                                </tileContent>
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="최다 불량 공정" subheader="공정 구간 기준">
+                                <TileContent>
+                                    <Text text="{kpi>/MaxDefectProcessName}" wrapping="true" />
+                                </TileContent>
                             </GenericTile>
-
                         </HBox>
 
                         <IconTabBar
@@ -107,7 +97,8 @@
                                                 <card:Header title="공정별 불량 현황" subtitle="공정 및 플랜트별 실시간 집계" iconSrc="sap-icon://bar-chart" />
                                             </f:header>
                                             <f:content>
-                                                <viz:VizFrame id="oChartProcess" vizType="column" width="100%" height="400px">
+                                                <viz:VizFrame id="oChartProcess" vizType="column" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }}'>
                                                     <viz:dataset>
                                                         <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
                                                             <viz.data:dimensions>
@@ -133,7 +124,8 @@
                                                 <card:Header title="월별 불량 발생 추이" subtitle="원재료 손실 금액 기준 트렌드 분석" iconSrc="sap-icon://line-chart" />
                                             </f:header>
                                             <f:content>
-                                                <viz:VizFrame id="oChartTrend" vizType="line" width="100%" height="400px">
+                                                <viz:VizFrame id="oChartTrend" vizType="line" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }}'>
                                                     <viz:dataset>
                                                         <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
                                                             <viz.data:dimensions>
@@ -179,6 +171,15 @@
                                         beforeRebindTable=".onBeforeRebindTable"
                                     >
 
+                                    <smartTable:customToolbar>
+                                        <OverflowToolbar>
+                                            <ToolbarSpacer/>
+                                            <Label text="불량 수량 상태: " class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="위험(10EA 초과)" state="Error" class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="주의(5EA 초과)" state="Warning" class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="정상(5EA 이하)" state="None" class="sapUiTinyMarginEnd"/>
+                                        </OverflowToolbar>
+                                    </smartTable:customToolbar>
                                         <Table
                                             alternateRowColors="true"
                                             fixedLayout="true"
@@ -264,14 +265,14 @@
                                                 <!--
                                                     highlight: DefectQty 기준 행 컬러바
                                                     > 10 → Error(빨강) / > 5 → Warning(노랑) / 이하 → None
-                                                    ※ DefectStatus 필드 추가 시 상태 기준으로 교체 권장
+                                                    ※ DefectStatus 필드 추가 시 상태 기준으로 교체할 예정
                                                 -->
                                                 <ColumnListItem
                                                     type="Active"
                                                     press=".onRowPress"
                                                     highlight="{= ${DefectQty} > 10 ? 'Error'
                                                                 : ${DefectQty} > 5  ? 'Warning'
-                                                                : 'Success' }">
+                                                                : 'None' }">
                                                     <cells>
                                                         <!-- 검사 번호 -->
                                                         <Text text="{InspectionNo}"/>
@@ -321,7 +322,7 @@
                                                             number="{DefectQty}"
                                                             unit="{Unit}"
                                                             state="{= ${DefectQty} > 10 ? 'Error'
-                                                                    : ${DefectQty} > 4  ? 'Warning'
+                                                                    : ${DefectQty} > 5  ? 'Warning'
                                                                     : 'None' }"/>
                                                     </cells>
                                                 </ColumnListItem>
