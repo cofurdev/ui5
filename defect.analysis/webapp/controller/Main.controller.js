@@ -55,9 +55,11 @@ sap.ui.define([
             oKpiModel.read("/KpiSummary", {
                 filters: aFilters,
                 success: (oData) => {
+                    console.log("KPI 결과", oData);
                     if (oData.results && oData.results.length > 0) {
                         // 결과 데이터를 기존에 만들어둔 "kpi" JSONModel에 넣어줌
                         oView.getModel("kpi").setData(oData.results[0]);
+                        console.log("KPI 타일 업데이트 트리거됨. 현재 TotalLossAmount:", this.getView().getModel("kpi").getProperty("/TotalLossAmount"));
                     } else {
                         oView.getModel("kpi").setData({
                             TotalDefectRate: 0, TotalLossAmount: 0, ReplenishQty: 0, MaxDefectRate: 0, MaxDefectProcessName: "데이터 없음"

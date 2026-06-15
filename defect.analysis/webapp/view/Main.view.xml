@@ -48,6 +48,7 @@
                             useToolbar="false"
                             showRestoreButton="false"
                             showGoOnFB="true"/>
+                        
                     </f:DynamicPageHeader>
                 </f:header>
 
@@ -56,14 +57,36 @@
                         <HBox wrap="Wrap" class="sapUiTinyMarginBottom">
                             <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="전체 불량률" subheader="금월 누적 기준">
                                 <TileContent>
-                                    <NumericContent value="{kpi>/TotalDefectRate}" valueColor="Critical" indicator="Up" scale="%" />
+                                    <NumericContent 
+                                        value="{
+                                            path: 'kpi>/TotalDefectRate',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: {
+                                                minFractionDigits: 2,
+                                                maxFractionDigits: 2
+                                            }
+                                        }" 
+                                        valueColor="Critical" 
+                                        indicator="Up" 
+                                        scale="%" />
                                 </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="총 폐기 손실액" subheader="FI 전표 연동">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="총 불량 차이 비용" subheader="FI 전표 연동">
                                 <TileContent>
-                                    <NumericContent value="{kpi>/TotalLossAmount}" scale="KRW" />
-                                </TileContent>
+                                    <NumericContent 
+                                        value="{
+                                            path: 'kpi>/TotalLossAmount',
+                                            type: 'sap.ui.model.type.Float',
+                                            formatOptions: {
+                                                groupingEnabled: true,
+                                                minFractionDigits: 0,
+                                                maxFractionDigits: 0
+                                            }
+                                        }" 
+                                        formatterValue="true"
+                                        truncateValueTo="14"
+                                        scale="{kpi>/Currency}" /> </TileContent>
                             </GenericTile>
 
                             <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="최다 불량 품목" subheader="완제품 기준">
