@@ -20,12 +20,8 @@
     
     displayBlock="true">
 
-    <f:FlexibleColumnLayout id="fclLayout" layout="{viewModel>/fclLayout}">
-
-        <!-- ════════════════════════════════════════════
-             BEGIN COLUMN — 필터 + 탭 + 테이블
-        ════════════════════════════════════════════ -->
-        <f:beginColumnPages>
+    <Page id="mainPageContainer" showHeader="false" enableScrolling="false">
+        <content>
             <f:DynamicPage id="mainPage" showFooter="false">
 
                 <f:title>
@@ -44,6 +40,7 @@
                         <smartFilterBar:SmartFilterBar
                             id="smartFilterBar"
                             entitySet="DefectDetail"
+                            initialise=".onSmartFilterBarInitialise"
                             search=".onSearch"
                             useToolbar="false"
                             showRestoreButton="false"
@@ -55,7 +52,7 @@
                 <f:content>
                     <VBox>
                         <HBox wrap="Wrap" class="sapUiTinyMarginBottom">
-                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="전체 불량률" subheader="금월 누적 기준">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="{i18n>tileTotalDefectRate}" subheader="{i18n>tileCurrentMonthAccumulated}">
                                 <TileContent>
                                     <NumericContent 
                                         value="{
@@ -72,7 +69,7 @@
                                 </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="총 불량 차이 비용" subheader="FI 전표 연동">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="{i18n>tileTotalLossAmount}" subheader="{i18n>tileFiDocumentLinked}">
                                 <TileContent>
                                     <NumericContent 
                                         value="{
@@ -89,13 +86,13 @@
                                         scale="{kpi>/Currency}" /> </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="최다 불량 품목" subheader="완제품 기준">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="{i18n>tileMaxDefectMaterial}" subheader="{i18n>tileFinishedProductBasis}">
                                 <TileContent>
                                     <Text text="{kpi>/MaxDefectMaterialName}" wrapping="true" />
                                 </TileContent>
                             </GenericTile>
 
-                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="최다 불량 공정" subheader="공정 구간 기준">
+                            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginEnd" header="{i18n>tileMaxDefectProcess}" subheader="{i18n>tileProcessSectionBasis}">
                                 <TileContent>
                                     <Text text="{kpi>/MaxDefectProcessName}" wrapping="true" />
                                 </TileContent>
@@ -107,68 +104,6 @@
                             expanded="{device>/isNoPhone}"
                             class="sapUiResponsiveContentPadding">
                             <items>
-                                <!-- 탭: 품질 분석 대시보드 -->
-                                <IconTabFilter
-                                    text="품질 분석 대시보드"
-                                    icon="sap-icon://bar-chart"
-                                    key="DefectDashboard">
-
-                                    <HBox wrap="Wrap" class="sapUiSmallMargin">
-                                        
-                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
-                                            <f:header>
-                                                <card:Header title="공정별 불량 현황" subtitle="공정 및 플랜트별 실시간 집계" iconSrc="sap-icon://bar-chart" />
-                                            </f:header>
-                                            <f:content>
-                                                <viz:VizFrame id="oChartProcess" vizType="column" width="100%" height="400px"
-                                                              vizProperties='{ "title": { "visible": false }}'>
-                                                    <viz:dataset>
-                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
-                                                            <viz.data:dimensions>
-                                                                <viz.data:DimensionDefinition name="공정" value="{ProcessName}" />
-                                                                <viz.data:DimensionDefinition name="플랜트" value="{Plant}" />
-                                                            </viz.data:dimensions>
-                                                            <viz.data:measures>
-                                                                <viz.data:MeasureDefinition name="불량수량" value="{DefectQty}" />
-                                                            </viz.data:measures>
-                                                        </viz.data:FlattenedDataset>
-                                                    </viz:dataset>
-                                                    <viz:feeds>
-                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="불량수량" />
-                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="공정" />
-                                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="플랜트" />
-                                                    </viz:feeds>
-                                                </viz:VizFrame>
-                                            </f:content>
-                                        </f:Card>
-
-                                        <f:Card class="sapUiMediumMarginBottom" width="400px">
-                                            <f:header>
-                                                <card:Header title="월별 불량 발생 추이" subtitle="원재료 손실 금액 기준 트렌드 분석" iconSrc="sap-icon://line-chart" />
-                                            </f:header>
-                                            <f:content>
-                                                <viz:VizFrame id="oChartTrend" vizType="line" width="100%" height="400px"
-                                                              vizProperties='{ "title": { "visible": false }}'>
-                                                    <viz:dataset>
-                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
-                                                            <viz.data:dimensions>
-                                                                <viz.data:DimensionDefinition name="연월" value="{InspectionYearMonth}" />
-                                                            </viz.data:dimensions>
-                                                            <viz.data:measures>
-                                                                <viz.data:MeasureDefinition name="손실금액" value="{LossAmount}" />
-                                                            </viz.data:measures>
-                                                        </viz.data:FlattenedDataset>
-                                                    </viz:dataset>
-                                                    <viz:feeds>
-                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="손실금액" />
-                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="연월" />
-                                                    </viz:feeds>
-                                                </viz:VizFrame>
-                                            </f:content>
-                                        </f:Card>
-
-                                    </HBox>
-                                </IconTabFilter>
                                 <!-- 탭: 불량 상세 목록 (count는 dataReceived에서 바인딩) -->
                                 <IconTabFilter
                                     text="{i18n>tabDefectList}"
@@ -189,7 +124,6 @@
                                         useVariantManagement="true"
                                         initiallyVisibleFields="InspectionNo,OrderNo,MaterialNo,Plant,ProcessName,DefectCode,DefectQty,InspectionEndDate"
                                         requestAtLeastFields="Unit,MaterialName,DefectText"
-                                        initialise=".onSmartTableInit"
                                         dataReceived=".onDataReceived"
                                         beforeRebindTable=".onBeforeRebindTable"
                                     >
@@ -197,10 +131,10 @@
                                     <smartTable:customToolbar>
                                         <OverflowToolbar>
                                             <ToolbarSpacer/>
-                                            <Label text="불량 수량 상태: " class="sapUiTinyMarginEnd"/>
-                                            <ObjectStatus text="위험(10EA 초과)" state="Error" class="sapUiTinyMarginEnd"/>
-                                            <ObjectStatus text="주의(5EA 초과)" state="Warning" class="sapUiTinyMarginEnd"/>
-                                            <ObjectStatus text="정상(5EA 이하)" state="None" class="sapUiTinyMarginEnd"/>
+                                            <Label text="{i18n>defectQtyStatus}" class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="{i18n>statusDangerOver10}" state="Error" class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="{i18n>statusWarningOver5}" state="Warning" class="sapUiTinyMarginEnd"/>
+                                            <ObjectStatus text="{i18n>statusNormalUnder5}" state="None" class="sapUiTinyMarginEnd"/>
                                         </OverflowToolbar>
                                     </smartTable:customToolbar>
                                         <Table
@@ -349,25 +283,154 @@
                                                                     : 'None' }"/>
                                                     </cells>
                                                 </ColumnListItem>
-                                            </items>
+
+
+                            </items>
                                         </Table>
                                     </smartTable:SmartTable>
+                                </IconTabFilter>
+                                                <!-- 탭: 품질 분석 대시보드 -->
+                                <IconTabFilter
+                                    text="{i18n>tabDashboard}"
+                                    icon="sap-icon://bar-chart"
+                                    key="DefectDashboard">
+
+                                    <HBox wrap="Wrap" class="sapUiSmallMargin">
+                                        
+                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="{i18n>cardProcessDefectShareTitle}" subtitle="{i18n>cardProcessDefectShareSubtitle}" iconSrc="sap-icon://pie-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartProcess" vizType="donut" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }, "plotArea": { "dataLabel": { "visible": true } }, "legend": { "visible": true } }'>
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="공정" value="{ProcessName}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="불량수량" value="{DefectQty}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="size" type="Measure" values="불량수량" />
+                                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="공정" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="{i18n>cardMaterialTop3Title}" subtitle="{i18n>cardMaterialTop3Subtitle}" iconSrc="sap-icon://horizontal-bar-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartMaterialTop3" vizType="bar" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }, "plotArea": { "dataLabel": { "visible": true } }, "valueAxis": { "title": { "visible": false } }, "categoryAxis": { "title": { "visible": false } } }'>
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{dashboard>/materialTop3}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="자재" value="{dashboard>MaterialLabel}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="누적불량수량" value="{dashboard>DefectQty}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="누적불량수량" />
+                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="자재" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="{i18n>cardMonthlyDefectTrendTitle}" subtitle="{i18n>cardMonthlyDefectTrendSubtitle}" iconSrc="sap-icon://line-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartTrend" vizType="line" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }}'>
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="연월" value="{InspectionYearMonth}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="손실금액" value="{LossAmount}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="손실금액" />
+                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="연월" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                        <f:Card class="sapUiMediumMarginEnd sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="{i18n>cardPlantDefectShareTitle}" subtitle="{i18n>cardPlantDefectShareSubtitle}" iconSrc="sap-icon://pie-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartPlantShare" vizType="donut" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }, "plotArea": { "dataLabel": { "visible": true } } }'>
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="플랜트" value="{Plant}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="불량수량" value="{DefectQty}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="size" type="Measure" values="불량수량" />
+                                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="플랜트" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                        <f:Card class="sapUiMediumMarginBottom" width="400px">
+                                            <f:header>
+                                                <card:Header title="{i18n>cardMonthlyDefectQtyTitle}" subtitle="{i18n>cardMonthlyDefectQtySubtitle}" iconSrc="sap-icon://vertical-bar-chart" />
+                                            </f:header>
+                                            <f:content>
+                                                <viz:VizFrame id="oChartMonthlyQty" vizType="stacked_column" width="100%" height="400px"
+                                                              vizProperties='{ "title": { "visible": false }}'>
+                                                    <viz:dataset>
+                                                        <viz.data:FlattenedDataset data="{chart>/DefectDashboard}">
+                                                            <viz.data:dimensions>
+                                                                <viz.data:DimensionDefinition name="연월" value="{InspectionYearMonth}" />
+                                                                <viz.data:DimensionDefinition name="플랜트" value="{Plant}" />
+                                                            </viz.data:dimensions>
+                                                            <viz.data:measures>
+                                                                <viz.data:MeasureDefinition name="불량수량" value="{DefectQty}" />
+                                                            </viz.data:measures>
+                                                        </viz.data:FlattenedDataset>
+                                                    </viz:dataset>
+                                                    <viz:feeds>
+                                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="불량수량" />
+                                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="연월" />
+                                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="플랜트" />
+                                                    </viz:feeds>
+                                                </viz:VizFrame>
+                                            </f:content>
+                                        </f:Card>
+
+                                    </HBox>
                                 </IconTabFilter>
                             </items>
                         </IconTabBar>
                     </VBox>
-                </f:content>
+        </f:content>
             </f:DynamicPage>
-        </f:beginColumnPages>
-
-        <!-- ════════════════════════════════════════════
-             MID COLUMN — 오더 상세 패널
-        ════════════════════════════════════════════ -->
-        <f:midColumnPages>
-            <mvc:XMLView
-                id="detailView"
-                viewName="code.d3.defect.analysis.view.OrderDetail"/>
-        </f:midColumnPages>
-
-    </f:FlexibleColumnLayout>
+        </content>
+    </Page>
 </mvc:View>

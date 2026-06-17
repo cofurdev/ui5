@@ -1,12 +1,208 @@
-<mvc:View controllerName="code.d3.defect.analysis.controller.Main"
+<mvc:View
+    controllerName="code.d3.defect.analysis.controller.OrderDetail"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
-    xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
-    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
-    xmlns:smartTable="sap.ui.comp.smarttable"
-    xmlns:viz="sap.viz.ui5.controls"
-    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
-    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns="sap.m"
     displayBlock="true">
+    <Page
+        id="inspectionDetailPage"
+        title="{i18n>inspectionDetailPageTitle}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        busy="{detail>/busy}">
+        <subHeader>
+            <OverflowToolbar>
+                <Text text="{i18n>breadcrumbInspectionDetail}"/>
+                <Text text="{detail>/selected/InspectionNo}"/>
+            </OverflowToolbar>
+        </subHeader>
+        <content>
+            <Panel
+                headerText="{i18n>inspectionBasicInfoTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <ObjectHeader
+                    intro="{i18n>qualityInspection}"
+                    title="{detail>/selected/InspectionNo}"
+                    number="{
+                        path: 'detail>/selected/DefectQty',
+                        type: 'sap.ui.model.type.Float',
+                        formatOptions: {
+                            minFractionDigits: 0,
+                            maxFractionDigits: 3
+                        }
+                    }"
+                    numberUnit="{detail>/selected/Unit}">
+                    <attributes>
+                        <ObjectAttribute title="{i18n>orderNo}" text="{detail>/selected/OrderNo}"/>
+                        <ObjectAttribute title="{i18n>plant}" text="{detail>/selected/Plant}"/>
+                        <ObjectAttribute title="{i18n>materialNo}" text="{detail>/selected/MaterialNo}"/>
+                        <ObjectAttribute title="{i18n>materialName}" text="{detail>/selected/MaterialName}"/>
+                        <ObjectAttribute title="{i18n>processName}" text="{detail>/selected/ProcessName}"/>
+                        <ObjectAttribute title="{i18n>defectCode}" text="{detail>/selected/DefectCode}"/>
+                        <ObjectAttribute title="{i18n>defectText}" text="{detail>/selected/DefectText}"/>
+                        <ObjectAttribute
+                            title="{i18n>inspectionEndDate}"
+                            text="{
+                                path: 'detail>/selected/InspectionEndDate',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: { pattern: 'yyyy-MM-dd' }
+                            }"/>
+                    </attributes>
+                </ObjectHeader>
+            </Panel>
+
+            <Panel
+                headerText="{i18n>inspectionDetailSummaryTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <VBox class="sapUiSmallMargin">
+                    <HBox wrap="Wrap">
+                        <ObjectStatus
+                            title="{i18n>defectQty}"
+                            text="{detail>/selected/DefectQty} {detail>/selected/Unit}"
+                            state="{= ${detail>/selected/DefectQty} > 10 ? 'Error' : ${detail>/selected/DefectQty} > 5 ? 'Warning' : 'None' }"
+                            class="sapUiMediumMarginEnd"/>
+                        <ObjectStatus
+                            title="{i18n>relatedInspectionCount}"
+                            text="{detail>/relatedSummary/inspectionCount}"
+                            state="Information"
+                            class="sapUiMediumMarginEnd"/>
+                        <ObjectStatus
+                            title="{i18n>relatedOrderTotalQty}"
+                            text="{detail>/relatedSummary/totalQty} {detail>/relatedSummary/unit}"
+                            state="None"/>
+                    </HBox>
+                </VBox>
+            </Panel>
+
+            <Panel
+                headerText="{i18n>productionOrderInfoTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <ObjectHeader
+                    intro="{i18n>productionOrderInfoTitle}"
+                    title="{detail>/productionOrder/Aufnr}"
+                    number="{
+                        path: 'detail>/productionOrder/Ordqt',
+                        type: 'sap.ui.model.type.Float',
+                        formatOptions: {
+                            minFractionDigits: 0,
+                            maxFractionDigits: 3
+                        }
+                    }"
+                    numberUnit="{detail>/productionOrder/Meins}">
+                    <statuses>
+                        <ObjectStatus
+                            title="{i18n>productionOrderStatus}"
+                            text="{detail>/productionOrder/Ordst}"
+                            state="{= ${detail>/productionOrder/Ordst} === 'RELS' ? 'Success' : ${detail>/productionOrder/Ordst} === 'CLRQ' ? 'Warning' : ${detail>/productionOrder/Ordst} === 'CLRJ' ? 'Error' : 'None' }"/>
+                    </statuses>
+                    <attributes>
+                        <ObjectAttribute title="{i18n>materialNo}" text="{detail>/productionOrder/Matnr}"/>
+                        <ObjectAttribute title="{i18n>materialName}" text="{detail>/productionOrder/Maktx}"/>
+                        <ObjectAttribute title="{i18n>plant}" text="{detail>/productionOrder/Werks} {detail>/productionOrder/Name1}"/>
+                        <ObjectAttribute title="{i18n>inputQty}" text="{detail>/productionOrder/ActqtIn} {detail>/productionOrder/Meins}"/>
+                        <ObjectAttribute
+                            title="{i18n>plannedStartDate}"
+                            text="{
+                                path: 'detail>/productionOrder/Pln_Sdt',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: { pattern: 'yyyy-MM-dd' }
+                            }"/>
+                        <ObjectAttribute
+                            title="{i18n>plannedEndDate}"
+                            text="{
+                                path: 'detail>/productionOrder/Pln_Edt',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: { pattern: 'yyyy-MM-dd' }
+                            }"/>
+                    </attributes>
+                </ObjectHeader>
+            </Panel>
+
+            <Panel
+                headerText="{i18n>additionalProductionOrderTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <Table
+                    items="{detail>/additionalProductionOrders}"
+                    alternateRowColors="true"
+                    fixedLayout="false">
+                    <columns>
+                        <Column><Text text="{i18n>orderNo}"/></Column>
+                        <Column><Text text="{i18n>materialNo}"/></Column>
+                        <Column hAlign="End"><Text text="{i18n>orderQty}"/></Column>
+                        <Column hAlign="End"><Text text="{i18n>inputQty}"/></Column>
+                        <Column><Text text="{i18n>plannedStartDate}"/></Column>
+                        <Column><Text text="{i18n>plannedEndDate}"/></Column>
+                        <Column><Text text="{i18n>productionOrderStatus}"/></Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <ObjectIdentifier title="{detail>Aufnr}" text="{detail>Aufnr_Org}"/>
+                                <ObjectIdentifier title="{detail>Matnr}" text="{detail>Maktx}"/>
+                                <ObjectNumber number="{detail>Ordqt}" unit="{detail>Meins}"/>
+                                <ObjectNumber number="{detail>ActqtIn}" unit="{detail>Meins}"/>
+                                <Text text="{
+                                    path: 'detail>Pln_Sdt',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: { pattern: 'yyyy-MM-dd' }
+                                }"/>
+                                <Text text="{
+                                    path: 'detail>Pln_Edt',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: { pattern: 'yyyy-MM-dd' }
+                                }"/>
+                                <ObjectStatus
+                                    text="{detail>Ordst}"
+                                    state="{= ${detail>Ordst} === 'RELS' ? 'Success' : ${detail>Ordst} === 'CLRQ' ? 'Warning' : ${detail>Ordst} === 'CLRJ' ? 'Error' : 'None' }"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+
+            <Panel
+                headerText="{i18n>relatedQualityInspectionTreeTitle}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>relatedQualityInspectionTreeTitle}" level="H3"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <Tree
+                    id="qualityInspectionTree"
+                    updateFinished=".onTreeUpdateFinished"
+                    items="{
+                        path: 'detail>/relatedTreeItems',
+                        parameters: {
+                            arrayNames: ['children']
+                        }
+                    }">
+                    <CustomTreeItem expanded="{detail>expanded}">
+                        <HBox alignItems="Center" width="100%">
+                            <core:Icon
+                                src="{detail>icon}"
+                                size="1.125rem"
+                                class="sapUiTinyMarginEnd"/>
+                            <VBox width="100%">
+                                <Text text="{detail>title}" wrapping="false"/>
+                                <Text
+                                    text="{detail>description}"
+                                    wrapping="false"
+                                    class="sapUiTinyMarginTop"/>
+                            </VBox>
+                            <ObjectStatus
+                                text="{detail>info}"
+                                state="{detail>state}"
+                                class="sapUiSmallMarginBegin"/>
+                        </HBox>
+                    </CustomTreeItem>
+                </Tree>
+            </Panel>
+        </content>
+    </Page>
 </mvc:View>

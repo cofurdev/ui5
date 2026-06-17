@@ -3,7 +3,13 @@
   "sap.app": {
     "id": "code.d3.defect.analysis",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [
+        ""
+      ],
+      "fallbackLocale": ""
+    },
     "applicationVersion": {
       "version": "0.0.1"
     },
@@ -47,6 +53,13 @@
         "settings": {
           "odataVersion": "2.0"
         }
+      },
+      "orderService": {
+        "uri": "/sap/opu/odata/sap/ZUI_D3_PP_DEFECT3_V2/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
       }
     }
   },
@@ -83,7 +96,11 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "code.d3.defect.analysis.i18n.i18n"
+          "bundleName": "code.d3.defect.analysis.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
         }
       },
       "": {
@@ -98,6 +115,10 @@
       },
       "kpi": {                             
         "dataSource": "kpiService",
+        "preload": true
+      },
+      "order": {
+        "dataSource": "orderService",
         "preload": true
       }
     },
@@ -127,12 +148,23 @@
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "name": "RouteInspectionDetail",
+          "pattern": "inspection/{inspectionNo}",
+          "target": [
+            "TargetInspectionDetail"
+          ]
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "TargetInspectionDetail": {
+          "id": "OrderDetail",
+          "name": "OrderDetail"
         }
       }
     },
