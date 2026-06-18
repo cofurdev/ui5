@@ -18,10 +18,12 @@ sap.ui.define([
                 orderNo: "",
                 selected: {},
                 relatedSummary: {},
+                defectCodeShare: {},
                 relatedTreeItems: [],
                 relatedItems: [],
                 productionOrder: {},
-                additionalProductionOrders: []
+                additionalProductionOrders: [],
+                productionOrderTreeItems: []
             }), "detail");
 
             this.getOwnerComponent().getRouter()
@@ -86,10 +88,12 @@ sap.ui.define([
                         orderNo: sOrderNo,
                         selected: oSelected,
                         relatedSummary: this._buildSummary(aRows),
+                        defectCodeShare: this._buildDefectCodeShare(oSelected, aRows),
                         relatedTreeItems: this._buildRelatedTree(sOrderNo, oSelected.InspectionNo, aRows),
                         relatedItems: aRows,
                         productionOrder: {},
-                        additionalProductionOrders: []
+                        additionalProductionOrders: [],
+                        productionOrderTreeItems: []
                     });
                     this._loadProductionOrderData(sOrderNo);
                 },
@@ -115,10 +119,12 @@ sap.ui.define([
                 ],
                 success: (oData) => {
                     oDetailModel.setProperty("/productionOrder", (oData.results || [])[0] || {});
+                    this._rebuildProductionOrderTree();
                 },
                 error: (oError) => {
                     Log.error("Production order header read failed", oError);
                     oDetailModel.setProperty("/productionOrder", {});
+                    this._rebuildProductionOrderTree();
                 }
             });
 
@@ -132,12 +138,147 @@ sap.ui.define([
                 ],
                 success: (oData) => {
                     oDetailModel.setProperty("/additionalProductionOrders", oData.results || []);
+                    this._rebuildProductionOrderTree();
                 },
                 error: (oError) => {
                     Log.error("Additional production orders read failed", oError);
                     oDetailModel.setProperty("/additionalProductionOrders", []);
+                    this._rebuildProductionOrderTree();
                 }
             });
+        },
+
+        _buildDefectCodeShare(oSelected, aRows) {
+            const fTotalQty = aRows.reduce((fSum, oRow) => fSum + Number(oRow.DefectQty || 0), 0);
+            const sDefectCode = oSelected.DefectCode || "";
+            const sDefectText = oSelected.DefectText || "";
+            const fCodeQty = aRows
+                .filter((oRow) => oRow.DefectCode === sDefectCode)
+                .reduce((fSum, oRow) => fSum + Number(oRow.DefectQty || 0), 0);
+
+            if (fTotalQty <= 0) {
+                return {
+                    label: this._getText("allPassed"),
+                    ratio: 100,
+                    ratioDisplay: "100%",
+                    codeQty: 0,
+                    totalQty: 0,
+                    state: "Success"
+                };
+            }
+
+            const fRatio = Math.round((fCodeQty / fTotalQty) * 1000) / 10;
+
+            return {
+                label: sDefectCode ? `${sDefectCode} ${sDefectText}`.trim() : this._getText("defectCode"),
+                ratio: fRatio,
+                ratioDisplay: `${fRatio}%`,
+                codeQty: fCodeQty,
+                totalQty: fTotalQty,
+                state: this._getDefectShareState(fRatio)
+            };
+        },
+
+        _getDefectShareState(fRatio) {
+            if (fRatio >= 50) {
+                return "Error";
+            }
+            if (fRatio >= 25) {
+                return "Warning";
+            }
+            return "Information";
+        },
+
+        onDefectShareHelpPress(oEvent) {
+            const oSource = oEvent.getSource();
+
+            if (!this._oDefectShareHelpPopover) {
+                sap.ui.require([
+                    "sap/m/ObjectStatus",
+                    "sap/m/Popover",
+                    "sap/m/Text",
+                    "sap/m/VBox"
+                ], (ObjectStatus, Popover, Text, VBox) => {
+                    this._oDefectShareHelpPopover = new Popover({
+                        title: this._getText("defectCodeShareHelpTitle"),
+                        contentWidth: "22rem",
+                        content: new VBox({
+                            class: "sapUiSmallMargin",
+                            items: [
+                                new ObjectStatus({
+                                    title: this._getText("defectCodeShareSuccessTitle"),
+                                    text: this._getText("defectCodeShareSuccessText"),
+                                    state: "Success",
+                                    class: "sapUiSmallMarginTop"
+                                }),
+                                new ObjectStatus({
+                                    title: this._getText("defectCodeShareInfoTitle"),
+                                    text: this._getText("defectCodeShareInfoText"),
+                                    state: "Information",
+                                    class: "sapUiTinyMarginTop"
+                                }),
+                                new ObjectStatus({
+                                    title: this._getText("defectCodeShareWarningTitle"),
+                                    text: this._getText("defectCodeShareWarningText"),
+                                    state: "Warning",
+                                    class: "sapUiTinyMarginTop"
+                                }),
+                                new ObjectStatus({
+                                    title: this._getText("defectCodeShareErrorTitle"),
+                                    text: this._getText("defectCodeShareErrorText"),
+                                    state: "Error",
+                                    class: "sapUiTinyMarginTop"
+                                })
+                            ]
+                        })
+                    });
+                    this.getView().addDependent(this._oDefectShareHelpPopover);
+                    this._oDefectShareHelpPopover.openBy(oSource);
+                });
+                return;
+            }
+
+            this._oDefectShareHelpPopover.openBy(oSource);
+        },
+
+        _rebuildProductionOrderTree() {
+            const oDetailModel = this.getView().getModel("detail");
+            const oOrder = oDetailModel.getProperty("/productionOrder") || {};
+            const aAdditionalOrders = oDetailModel.getProperty("/additionalProductionOrders") || [];
+            const sOrderNo = oDetailModel.getProperty("/orderNo") || oOrder.Aufnr || "";
+
+            oDetailModel.setProperty("/productionOrderTreeItems", this._buildProductionOrderTree(sOrderNo, oOrder, aAdditionalOrders));
+        },
+
+        _buildProductionOrderTree(sOrderNo, oOrder, aAdditionalOrders) {
+            const oRoot = Object.keys(oOrder).length > 0 ? oOrder : { Aufnr: sOrderNo };
+
+            return [{
+                title: this._getText("treeProductionOrderTitle", [oRoot.Aufnr || sOrderNo || "-"]),
+                description: this._getText("treeProductionOrderDescription", [
+                    oRoot.Matnr || "-",
+                    oRoot.Maktx || "-",
+                    oRoot.Werks || "-",
+                    oRoot.Name1 || "-"
+                ]),
+                icon: "sap-icon://factory",
+                info: `${oRoot.Ordqt || 0} ${oRoot.Meins || ""}`.trim(),
+                state: this._getOrderState(oRoot.Ordst),
+                expanded: true,
+                children: aAdditionalOrders.map((oChild) => ({
+                    title: this._getText("treeAdditionalProductionOrderTitle", [oChild.Aufnr || "-"]),
+                    description: this._getText("treeAdditionalProductionOrderDescription", [
+                        oChild.Matnr || "-",
+                        oChild.Maktx || "-",
+                        this._formatDate(oChild.Pln_Sdt) || "-",
+                        this._formatDate(oChild.Pln_Edt) || "-"
+                    ]),
+                    icon: "sap-icon://add-product",
+                    info: `${oChild.Ordqt || 0} ${oChild.Meins || ""}`.trim(),
+                    state: this._getOrderState(oChild.Ordst),
+                    expanded: false
+                }))
+            }];
         },
 
         _buildSummary(aRows) {
@@ -206,6 +347,29 @@ sap.ui.define([
                 return "Warning";
             }
             return "None";
+        },
+
+        _getOrderState(sStatus) {
+            if (sStatus === "RELS") {
+                return "Success";
+            }
+            if (sStatus === "CLRQ") {
+                return "Warning";
+            }
+            if (sStatus === "CLRJ") {
+                return "Error";
+            }
+            return "None";
+        },
+
+        onProductionOrderTreeItemPress(oEvent) {
+            const oItem = oEvent.getParameter("listItem");
+            const oContext = oItem && oItem.getBindingContext("detail");
+            const aChildren = oContext && oContext.getProperty("children");
+
+            if (oItem && aChildren && aChildren.length > 0 && oItem.setExpanded) {
+                oItem.setExpanded(!oItem.getExpanded());
+            }
         },
 
         onTreeUpdateFinished() {

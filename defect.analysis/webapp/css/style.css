@@ -1,1 +1,73 @@
 /* Enter your custom styles here */
+
+.mainPageClamp,
+.mainContentClamp,
+.mainTabBarClamp,
+.defectSmartTable {
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.dashboardCard {
+    min-width: 0;
+}
+
+.orderDelayCardContent {
+    gap: 0.75rem;
+}
+
+.orderDelaySummary {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #f7f9fb;
+    border: 1px solid #d5dadd;
+}
+
+.orderDelayHeroLabel {
+    color: #556b82;
+}
+
+.orderDelayHeroNumber .sapMObjectNumberText {
+    font-size: 2rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+}
+
+.orderDelayHeroNumber .sapMObjectNumberUnit {
+    font-size: 1rem;
+}
+
+.orderDelayMeta {
+    gap: 0.5rem;
+}
+
+.orderDelayMicroCharts {
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.orderDelayRateBox,
+.orderDelayComparisonBox {
+    min-width: 12rem;
+    padding: 0.75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
+.orderDelayComparisonBox {
+    flex: 1 1 18rem;
+}
+
+.orderDelayLegacyChart {
+    display: none !important;
+    height: 0 !important;
+}
