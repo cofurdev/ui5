@@ -10,7 +10,14 @@
         <content>
             <VBox class="sapUiSmallMargin">
                 <Label text="{i18n>labelRejectReason}" required="true"/>
-                <TextArea id="taRejectReason" width="100%" rows="4" placeholder="{i18n>placeholderRejectReason}"/>
+                <TextArea
+                    id="taRejectReason"
+                    width="100%"
+                    rows="4"
+                    maxLength="50"
+                    showExceededText="true"
+                    liveChange=".onRejectReasonLiveChange"
+                    placeholder="{i18n>placeholderRejectReason}"/>
             </VBox>
         </content>
         

@@ -38,7 +38,10 @@
                 mode="MultiSelect"
                 selectionChange=".onSelectionChange"
                 class="sapUiResponsiveMargin"
-                width="auto">
+                width="auto"
+                growing="true"
+                growingThreshold="20"
+                growingScrollToLoad="true">
 
                 <!-- 테이블 툴바 : 타이틀 / 선택 건수 / 일괄 승인 / 일괄 반려 -->
                 <headerToolbar>

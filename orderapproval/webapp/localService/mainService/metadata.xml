@@ -24,7 +24,8 @@
                 <Property Name="ActSdt" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="생산 실제 시작일" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="ActEdt" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="생산 실제 종료일" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Ordst" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="오더 상태" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="RejTxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="반려 사유" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RejTxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="반려 사유" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Belnr" Type="Edm.String" Nullable="true" MaxLength="10" sap:unicode="false" sap:label="FI Document Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Erdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="생성일" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Erzzt" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="생성시간" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="Ernam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="생성자" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>

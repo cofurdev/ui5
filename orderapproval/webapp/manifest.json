@@ -49,7 +49,9 @@
       "minUI5Version": "1.120.23",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.comp": {}
       }
     },
     "contentDensities": {
@@ -100,6 +102,13 @@
         "viewPath": "code.d3.orderapproval.view"
       },
       "routes": [
+        {
+          "name": "RouteMainDefault",
+          "pattern": "",
+          "target": [
+            "TargetMain"
+          ]
+        },
         {
           "name": "RouteMain",
           "pattern": ":?query:",
