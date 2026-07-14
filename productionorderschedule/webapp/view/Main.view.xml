@@ -1,0 +1,148 @@
+<mvc:View
+  controllerName="code.d3.productionorderschedule.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  displayBlock="true">
+  <Page
+    id="page"
+    title="{i18n>mainTitle}"
+    busy="{view>/ui/busy}"
+    busyIndicatorDelay="0">
+    <content>
+      <VBox class="sapUiResponsiveContentPadding schedulePage">
+        <Panel
+          expandable="true"
+          expanded="true"
+          headerText="{i18n>searchConditions}"
+          class="sapUiSmallMarginBottom">
+          <content>
+            <FlexBox
+              wrap="Wrap"
+              alignItems="End"
+              class="filterBar">
+              <VBox class="filterItem">
+                <Label text="{i18n>plant}"/>
+                <Input value="{view>/filters/Plant}" width="100%" showValueHelp="true" valueHelpRequest=".onPlantValueHelp"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>productionOrder}"/>
+                <Input value="{view>/filters/ProductionOrder}" width="100%" showValueHelp="true" valueHelpRequest=".onProductionOrderValueHelp"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>originalProductionOrder}"/>
+                <Input value="{view>/filters/OriginalProductionOrder}" width="100%" showValueHelp="true" valueHelpRequest=".onOriginalProductionOrderValueHelp"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>product}"/>
+                <Input value="{view>/filters/Product}" width="100%" showValueHelp="true" valueHelpRequest=".onProductValueHelp"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>plannedStartDate}"/>
+                <DatePicker dateValue="{view>/filters/PlannedStartDate}" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" width="100%"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>plannedEndDate}"/>
+                <DatePicker dateValue="{view>/filters/PlannedEndDate}" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" width="100%"/>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>productionOrderStatus}"/>
+                <Select selectedKey="{view>/filters/ProductionOrderStatus}" width="100%" items="{view>/orderStatusOptions}">
+                  <core:Item xmlns:core="sap.ui.core" key="{view>key}" text="{view>text}"/>
+                </Select>
+              </VBox>
+              <VBox class="filterItem">
+                <Label text="{i18n>scheduleStatus}"/>
+                <Select selectedKey="{view>/filters/ScheduleStatus}" width="100%" items="{view>/scheduleStatusOptions}">
+                  <core:Item xmlns:core="sap.ui.core" key="{view>key}" text="{view>text}"/>
+                </Select>
+              </VBox>
+              <CheckBox
+                text="{i18n>delayedOnly}"
+                selected="{view>/filters/DelayedOnly}"
+                class="filterCheck"/>
+              <Button text="{i18n>search}" type="Emphasized" press=".onSearch"/>
+              <Button text="{i18n>reset}" press=".onReset"/>
+              <Button text="{i18n>refresh}" press=".onRefresh"/>
+            </FlexBox>
+          </content>
+        </Panel>
+
+        <FlexBox wrap="Wrap" class="kpiStrip sapUiSmallMarginBottom">
+          <GenericTile header="{i18n>kpiTotal}" frameType="OneByHalf" class="kpiTile">
+            <TileContent><NumericContent value="{view>/kpi/total}" icon="sap-icon://order-status"/></TileContent>
+          </GenericTile>
+          <GenericTile header="{i18n>kpiInProgress}" frameType="OneByHalf" class="kpiTile">
+            <TileContent><NumericContent value="{view>/kpi/inProgress}" valueColor="Good" icon="sap-icon://process"/></TileContent>
+          </GenericTile>
+          <GenericTile header="{i18n>kpiDelayed}" frameType="OneByHalf" class="kpiTile">
+            <TileContent><NumericContent value="{view>/kpi/delayed}" valueColor="Critical" icon="sap-icon://alert"/></TileContent>
+          </GenericTile>
+          <GenericTile header="{i18n>kpiComplete}" frameType="OneByHalf" class="kpiTile">
+            <TileContent><NumericContent value="{view>/kpi/complete}" valueColor="Good" icon="sap-icon://complete"/></TileContent>
+          </GenericTile>
+        </FlexBox>
+
+        <Toolbar>
+          <Title text="{i18n>orderList}" level="H2"/>
+          <ToolbarSpacer/>
+          <ObjectStatus text="{i18n>resultCount}: {view>/ui/resultCount}"/>
+        </Toolbar>
+
+        <Table
+          id="ordersTable"
+          growing="true"
+          growingScrollToLoad="true"
+          mode="SingleSelectMaster"
+          includeItemInSelection="true"
+          noDataText="{i18n>noOrders}"
+          updateFinished=".onUpdateFinished"
+          itemPress=".onItemPress"
+          selectionChange=".onSelectionChange"
+          items="{
+            path: '/ProductionOrderSchedule',
+            events: {
+              dataRequested: '.onDataRequested',
+              dataReceived: '.onDataReceived'
+            }
+          }">
+          <columns>
+            <Column importance="High"><Text text="{i18n>scheduleStatus}"/></Column>
+            <Column importance="High"><Text text="{i18n>productionOrder}"/></Column>
+            <Column importance="High"><Text text="{i18n>product}"/></Column>
+            <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>productName}"/></Column>
+            <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>plant}"/></Column>
+            <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>orderQuantity}"/></Column>
+            <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>actualInputQuantity}"/></Column>
+            <Column width="9rem"><Text text="{i18n>progressRate}"/></Column>
+            <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>plannedStartDate}"/></Column>
+            <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>plannedEndDate}"/></Column>
+            <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualStartDate}"/></Column>
+            <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualEndDate}"/></Column>
+            <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>delayDays}"/></Column>
+            <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>productionOrderStatus}"/></Column>
+          </columns>
+          <items>
+            <ColumnListItem type="Navigation" press=".onItemPress">
+              <cells>
+                <ObjectStatus text="{ScheduleStatusText}" state="{path: 'ScheduleStatus', formatter: '.formatter.scheduleState'}"/>
+                <ObjectIdentifier title="{ProductionOrder}"/>
+                <Text text="{Product}"/>
+                <Text text="{ProductName}"/>
+                <Text text="{Plant}"/>
+                <Text text="{parts: [{path: 'OrderQuantity'}, {path: 'OrderUnit'}], formatter: '.formatter.formatQuantity'}"/>
+                <Text text="{parts: [{path: 'ActualInputQuantity'}, {path: 'OrderUnit'}], formatter: '.formatter.formatQuantity'}"/>
+                <ProgressIndicator percentValue="{path: 'ProgressRate', formatter: '.formatter.progressValue'}" displayValue="{path: 'ProgressRate', formatter: '.formatter.progressDisplayValue'}"/>
+                <Text text="{path: 'PlannedStartDate', formatter: '.formatter.formatDate'}"/>
+                <Text text="{path: 'PlannedEndDate', formatter: '.formatter.formatDate'}"/>
+                <Text text="{path: 'ActualStartDate', formatter: '.formatter.formatDate'}"/>
+                <Text text="{path: 'ActualEndDate', formatter: '.formatter.formatDate'}"/>
+                <ObjectStatus text="{DelayDays}" state="{path: 'DelayDays', formatter: '.formatter.delayState'}"/>
+                <ObjectStatus text="{ProductionOrderStatusText}" state="{path: 'ProductionOrderStatus', formatter: '.formatter.orderStatusState'}"/>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

@@ -1,0 +1,139 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "code.d3.productionorderschedule",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.24.0",
+      "toolsId": "bca3642f-44ef-4f11-91cf-c862cb7fc668"
+    },
+    "dataSources": {
+      "ZUI_D3_PP_SCHEDULE_V2_VAN": {
+        "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZUI_D3_PP_SCHEDULE_V2_VAN',Version='0001')/$value/",
+        "type": "ODataAnnotation",
+        "settings": {
+          "localUri": "localService/mainService/ZUI_D3_PP_SCHEDULE_V2_VAN.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZUI_D3_PP_SCHEDULE_V2/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "ZUI_D3_PP_SCHEDULE_V2_VAN"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.23",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "code.d3.productionorderschedule.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultCountMode": "Request",
+          "useBatch": true,
+          "refreshAfterChange": false
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "code.d3.productionorderschedule.view",
+        "async": true,
+        "viewPath": "code.d3.productionorderschedule.view"
+      },
+      "routes": [
+        {
+          "name": "RouteDetail",
+          "pattern": "detail/{contextPath}",
+          "target": [
+            "TargetDetail"
+          ]
+        },
+        {
+          "name": "RouteMain",
+          "pattern": ":?query:",
+          "target": [
+            "TargetMain"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetMain": {
+          "id": "Main",
+          "name": "Main"
+        },
+        "TargetDetail": {
+          "id": "Detail",
+          "name": "Detail"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "code.d3.productionorderschedule.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

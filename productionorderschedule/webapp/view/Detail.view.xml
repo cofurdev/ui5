@@ -1,0 +1,113 @@
+<mvc:View
+  controllerName="code.d3.productionorderschedule.controller.Detail"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  displayBlock="true">
+  <Page
+    title="{i18n>detailTitle} {ProductionOrder}"
+    showNavButton="true"
+    navButtonPress=".onNavBack">
+    <content>
+      <VBox class="sapUiResponsiveContentPadding schedulePage">
+        <ObjectHeader
+          title="{ProductionOrder}"
+          intro="{ProductName}"
+          number="{path: 'ProgressRate', formatter: '.formatter.progressDisplayValue'}"
+          numberUnit="{i18n>progressRate}">
+          <attributes>
+            <ObjectAttribute title="{i18n>plant}" text="{Plant}"/>
+            <ObjectAttribute title="{i18n>product}" text="{Product}"/>
+            <ObjectAttribute title="{i18n>plannedOrder}" text="{PlannedOrder}"/>
+          </attributes>
+          <statuses>
+            <ObjectStatus text="{ScheduleStatusText}" state="{path: 'ScheduleStatus', formatter: '.formatter.scheduleState'}"/>
+            <ObjectStatus text="{ProductionOrderStatusText}" state="{path: 'ProductionOrderStatus', formatter: '.formatter.orderStatusState'}"/>
+          </statuses>
+        </ObjectHeader>
+
+        <Panel headerText="{i18n>basicInfo}" class="sapUiSmallMarginBottom">
+          <content>
+            <VBox class="detailGrid">
+              <ObjectAttribute title="{i18n>productionOrder}" text="{ProductionOrder}"/>
+              <ObjectAttribute title="{i18n>originalProductionOrder}" text="{OriginalProductionOrder}"/>
+              <ObjectAttribute title="{i18n>plannedOrder}" text="{PlannedOrder}"/>
+              <ObjectAttribute title="{i18n>product}" text="{Product}"/>
+              <ObjectAttribute title="{i18n>productName}" text="{ProductName}"/>
+              <ObjectAttribute title="{i18n>plant}" text="{Plant}"/>
+              <ObjectAttribute title="{i18n>plantName}" text="{PlantName}"/>
+              <ObjectAttribute title="{i18n>billOfMaterial}" text="{BillOfMaterial}"/>
+              <ObjectAttribute title="{i18n>routing}" text="{Routing}"/>
+            </VBox>
+          </content>
+        </Panel>
+
+        <Panel headerText="{i18n>productionResult}" class="sapUiSmallMarginBottom">
+          <content>
+            <VBox class="detailGrid">
+              <ObjectAttribute title="{i18n>orderQuantity}" text="{parts: [{path: 'OrderQuantity'}, {path: 'OrderUnit'}], formatter: '.formatter.formatQuantity'}"/>
+              <ObjectAttribute title="{i18n>actualInputQuantity}" text="{parts: [{path: 'ActualInputQuantity'}, {path: 'OrderUnit'}], formatter: '.formatter.formatQuantity'}"/>
+              <ObjectAttribute title="{i18n>orderUnit}" text="{OrderUnit}"/>
+              <ProgressIndicator
+                percentValue="{path: 'ProgressRate', formatter: '.formatter.progressValue'}"
+                displayValue="{path: 'ProgressRate', formatter: '.formatter.progressDisplayValue'}"/>
+            </VBox>
+          </content>
+        </Panel>
+
+        <Panel headerText="{i18n>scheduleInfo}" class="sapUiSmallMarginBottom">
+          <content>
+            <VBox class="detailGrid">
+              <ObjectAttribute title="{i18n>plannedStartDate}" text="{path: 'PlannedStartDate', formatter: '.formatter.formatDate'}"/>
+              <ObjectAttribute title="{i18n>plannedEndDate}" text="{path: 'PlannedEndDate', formatter: '.formatter.formatDate'}"/>
+              <ObjectAttribute title="{i18n>actualStartDate}" text="{path: 'ActualStartDate', formatter: '.formatter.formatDate'}"/>
+              <ObjectAttribute title="{i18n>actualEndDate}" text="{path: 'ActualEndDate', formatter: '.formatter.formatDate'}"/>
+              <ObjectAttribute title="{i18n>delayDays}" text="{DelayDays}"/>
+              <ObjectStatus text="{ScheduleStatusText}" state="{path: 'ScheduleStatus', formatter: '.formatter.scheduleState'}"/>
+            </VBox>
+          </content>
+        </Panel>
+
+        <Panel headerText="{i18n>operationList}">
+          <content>
+            <Table id="operationTable" growing="true" noDataText="{i18n>noOperations}" items="{to_Operation}">
+              <columns>
+                <Column importance="High"><Text text="{i18n>operation}"/></Column>
+                <Column importance="High"><Text text="{i18n>workCenter}"/></Column>
+                <Column importance="High"><Text text="{i18n>operationDescription}"/></Column>
+                <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>operationStatus}"/></Column>
+                <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualStartDate}"/></Column>
+                <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualStartTime}"/></Column>
+                <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualEndDate}"/></Column>
+                <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>actualEndTime}"/></Column>
+                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>orderQuantity}"/></Column>
+                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>actualOutputQuantity}"/></Column>
+                <Column hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>remainingQuantity}"/></Column>
+                <Column width="9rem"><Text text="{i18n>progressRate}"/></Column>
+              </columns>
+              <items>
+                <ColumnListItem>
+                  <cells>
+                    <Text text="{Operation}"/>
+                    <Text text="{WorkCenter}"/>
+                    <Text text="{OperationDescription}"/>
+                    <ObjectStatus text="{OperationStatusText}" state="{path: 'OperationStatus', formatter: '.formatter.orderStatusState'}"/>
+                    <Text text="{path: 'ActualStartDate', formatter: '.formatter.formatDate'}"/>
+                    <Text text="{path: 'ActualStartTime', formatter: '.formatter.formatTime'}"/>
+                    <Text text="{path: 'ActualEndDate', formatter: '.formatter.formatDate'}"/>
+                    <Text text="{path: 'ActualEndTime', formatter: '.formatter.formatTime'}"/>
+                    <Text text="{parts: [{path: 'OrderQuantity'}, {path: 'OperationUnit'}], formatter: '.formatter.formatQuantity'}"/>
+                    <Text text="{parts: [{path: 'ActualOutputQuantity'}, {path: 'OperationUnit'}], formatter: '.formatter.formatQuantity'}"/>
+                    <ObjectStatus text="{parts: [{path: 'RemainingQuantity'}, {path: 'OperationUnit'}], formatter: '.formatter.formatQuantity'}" state="{path: 'RemainingQuantity', formatter: '.formatter.remainingQuantityState'}"/>
+                    <ProgressIndicator
+                      percentValue="{path: 'OperationProgressRate', formatter: '.formatter.progressValue'}"
+                      displayValue="{path: 'OperationProgressRate', formatter: '.formatter.progressDisplayValue'}"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </content>
+        </Panel>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>
